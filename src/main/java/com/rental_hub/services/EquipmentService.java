@@ -37,9 +37,9 @@ public class EquipmentService {
 
     public void addTagToEquipment(String tagId, int equipmentId) {
         Equipment equipment = equipmentRepo.findById(equipmentId)
-            .orElseThrow(() -> new EntityNotFoundException());
+            .orElseThrow(EntityNotFoundException::new);
         Tag tag = tagRepo.findById(tagId)
-            .orElseThrow(() -> new EntityNotFoundException());
+            .orElseThrow(EntityNotFoundException::new);
 
         equipment.getTags().add(tag);
         tag.getEquipments().add(equipment);
