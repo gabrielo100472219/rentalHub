@@ -33,7 +33,7 @@ public class Equipment {
     private String brand;
 
     @Column(nullable=false)
-    private float pricePerDay;
+    private int pricePerDayCents;
 
     @Column(nullable=false)
     private boolean available;
@@ -64,8 +64,7 @@ public class Equipment {
 
     @PreUpdate
     public void onPreUpdate() {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        this.updatedAt = now;
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
     public void setName(String name) {
@@ -80,8 +79,8 @@ public class Equipment {
         this.brand = brand;
     }
 
-    public void setPricePerDay(float pricePerDay) {
-        this.pricePerDay = pricePerDay;
+    public void setPricePerDayCents(int pricePerDay) {
+        this.pricePerDayCents = pricePerDay;
     }
 
     public void setAvailable(boolean available) {
@@ -100,8 +99,8 @@ public class Equipment {
         return brand;
     }
 
-    public float getPricePerDay() {
-        return pricePerDay;
+    public int getPricePerDayCents() {
+        return pricePerDayCents;
     }
 
     public boolean isAvailable() {

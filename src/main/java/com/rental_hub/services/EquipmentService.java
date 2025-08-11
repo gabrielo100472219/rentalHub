@@ -11,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import com.rental_hub.entities.Equipment;
 import com.rental_hub.entities.Tag;
 
+import java.util.List;
+
 @Service
 public class EquipmentService {
     
@@ -30,7 +32,7 @@ public class EquipmentService {
         equipmentToUpdate.setName(equipment.getName());
         equipmentToUpdate.setBrand(equipment.getBrand());
         equipmentToUpdate.setType(equipment.getType());
-        equipmentToUpdate.setPricePerDay(equipment.getPricePerDay());
+        equipmentToUpdate.setPricePerDayCents(equipment.getPricePerDayCents());
         equipmentToUpdate.setAvailable(equipment.isAvailable());
         equipmentRepo.save(equipmentToUpdate);
     }
@@ -46,5 +48,12 @@ public class EquipmentService {
 
         equipmentRepo.save(equipment);
         tagRepo.save(tag);
+    }
+
+    public List<Equipment> getEquipmentsInPriceRangeInCents(int min, int max) {
+        List<Equipment> equipmentList = equipmentRepo.findAll();
+        return equipmentList.stream()
+                .filter(equipment -> equipment.getPricePerDayCents() >= min && equipment.getPricePerDayCents() <= max)
+                .toList();
     }
 }
