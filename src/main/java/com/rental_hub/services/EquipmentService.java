@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import com.rental_hub.entities.Equipment;
 import com.rental_hub.entities.Tag;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
