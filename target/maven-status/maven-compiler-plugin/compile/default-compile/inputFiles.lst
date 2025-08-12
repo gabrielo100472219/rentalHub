@@ -1,7 +1,11 @@
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/Application.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/Role.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/controllers/EquipmentController.java
+/Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/controllers/TagsController.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/entities/Equipment.java
+/Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/entities/Tag.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/entities/User.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/repositories/EquipmentRepository.java
+/Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/repositories/TagRepository.java
 /Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/services/EquipmentService.java
+/Users/gabrielo/Documents/javaPractice/rentalHub/src/main/java/com/rental_hub/services/TagService.java

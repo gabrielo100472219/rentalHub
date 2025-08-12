@@ -16,11 +16,14 @@ import java.util.List;
 @Service
 public class EquipmentService {
     
-    @Autowired
-    private EquipmentRepository equipmentRepo;
+    private final EquipmentRepository equipmentRepo;
 
-    @Autowired
-    private TagRepository tagRepo;
+    private final TagRepository tagRepo;
+
+    public EquipmentService(EquipmentRepository equipmentRepo, TagRepository tagRepo) {
+        this.equipmentRepo = equipmentRepo;
+        this.tagRepo = tagRepo;
+    }
 
     public void addEquipment(Equipment equipment) {
         equipmentRepo.save(equipment);
@@ -51,8 +54,7 @@ public class EquipmentService {
     }
 
     public List<Equipment> getEquipmentsInPriceRangeInCents(int min, int max) {
-        List<Equipment> equipmentList = equipmentRepo.findAll();
-        return equipmentList.stream()
+        return equipmentRepo.findAll().stream()
                 .filter(equipment -> equipment.getPricePerDayCents() >= min && equipment.getPricePerDayCents() <= max)
                 .toList();
     }
