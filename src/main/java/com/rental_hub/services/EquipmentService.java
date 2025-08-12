@@ -55,7 +55,12 @@ public class EquipmentService {
 
     public List<Equipment> getEquipmentsInPriceRangeInCents(int min, int max) {
         return equipmentRepo.findAll().stream()
-                .filter(equipment -> equipment.getPricePerDayCents() >= min && equipment.getPricePerDayCents() <= max)
+                .filter(Equipment::isAvailable)
+                .filter(equipment -> isWithinPriceRange(equipment, min, max))
                 .toList();
+    }
+
+    private boolean isWithinPriceRange(Equipment equipment, int min, int max) {
+        return equipment.getPricePerDayCents() >= min && equipment.getPricePerDayCents() <= max;
     }
 }
