@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import com.rental_hub.entities.Equipment;
 import com.rental_hub.entities.Tag;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -54,6 +55,8 @@ public class EquipmentService {
     }
 
     public List<Equipment> getEquipmentsInPriceRangeInCents(int min, int max) {
+        if (min > max) return Collections.emptyList();
+
         return equipmentRepo.findAll().stream()
                 .filter(Equipment::isAvailable)
                 .filter(equipment -> isWithinPriceRange(equipment, min, max))
