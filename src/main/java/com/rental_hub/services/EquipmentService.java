@@ -11,14 +11,20 @@ import jakarta.persistence.EntityNotFoundException;
 import com.rental_hub.entities.Equipment;
 import com.rental_hub.entities.Tag;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class EquipmentService {
     
-    @Autowired
-    private EquipmentRepository equipmentRepo;
+    private final EquipmentRepository equipmentRepo;
 
-    @Autowired
-    private TagRepository tagRepo;
+    private final TagRepository tagRepo;
+
+    public EquipmentService(EquipmentRepository equipmentRepo, TagRepository tagRepo) {
+        this.equipmentRepo = equipmentRepo;
+        this.tagRepo = tagRepo;
+    }
 
     public void addEquipment(Equipment equipment) {
         equipmentRepo.save(equipment);
@@ -30,7 +36,7 @@ public class EquipmentService {
         equipmentToUpdate.setName(equipment.getName());
         equipmentToUpdate.setBrand(equipment.getBrand());
         equipmentToUpdate.setType(equipment.getType());
-        equipmentToUpdate.setPricePerDay(equipment.getPricePerDay());
+        equipmentToUpdate.setPricePerDayCents(equipment.getPricePerDayCents());
         equipmentToUpdate.setAvailable(equipment.isAvailable());
         equipmentRepo.save(equipmentToUpdate);
     }
@@ -46,5 +52,18 @@ public class EquipmentService {
 
         equipmentRepo.save(equipment);
         tagRepo.save(tag);
+    }
+
+    public List<Equipment> getEquipmentsInPriceRangeInCents(int min, int max) {
+        if (min > max) return Collections.emptyList();
+
+        return equipmentRepo.findAll().stream()
+                .filter(Equipment::isAvailable)
+                .filter(equipment -> isWithinPriceRange(equipment, min, max))
+                .toList();
+    }
+
+    private boolean isWithinPriceRange(Equipment equipment, int min, int max) {
+        return equipment.getPricePerDayCents() >= min && equipment.getPricePerDayCents() <= max;
     }
 }

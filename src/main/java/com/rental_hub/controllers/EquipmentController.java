@@ -1,14 +1,12 @@
 package com.rental_hub.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.rental_hub.entities.Equipment;
 import com.rental_hub.services.EquipmentService;
+
+import java.util.List;
 
 @RestController
 public class EquipmentController {
@@ -27,7 +25,11 @@ public class EquipmentController {
 
     @PostMapping("/equipments/{equipmentId}/tags")
     public void addTagToEquipment(@PathVariable int equipmentId, @RequestBody String tag) {
-        System.out.println("tag: " + tag);
         equipmentService.addTagToEquipment(tag, equipmentId);
+    }
+
+    @GetMapping("/equipments")
+    public List<Equipment> getEquipmentsInPriceRangeInCents(@RequestParam Integer min, @RequestParam Integer max) {
+       return equipmentService.getEquipmentsInPriceRangeInCents(min, max);
     }
 }
