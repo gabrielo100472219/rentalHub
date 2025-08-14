@@ -82,5 +82,3 @@ Would you like:
 * An **ER diagram** of the model?
 * A **starter repo structure**?
 * Specific features to build in order?
-
-Let me know how you'd like to proceed!
