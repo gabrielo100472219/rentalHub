@@ -1,0 +1,16 @@
+CREATE ROLE raplicacion_data_quality;
+CREATE ROLE rbrecha_salarial;
+CREATE ROLE rcompensacion_comision;
+CREATE ROLE rcompensacion_comision_meta4;
+CREATE ROLE retl_rrhh;
+CREATE ROLE rmantenimiento_brecha_salarial;
+CREATE ROLE rmantenimiento_brechasala;
+CREATE ROLE rmantenimiento_compensacion_comision;
+CREATE ROLE rmantenimiento_income;
+CREATE ROLE rmonitorizacion_brecha_salarial;
+CREATE ROLE rmonitorizacion_compensacion_comision;
+CREATE ROLE rmonitorizacion_data_quality;
+CREATE ROLE rmonitorizacion_rrhh;
+CREATE ROLE rreporting_services_rrhh;
+CREATE ROLE rreporting_sil_sistema_informacional;
+CREATE ROLE rservicios_sil_sistema_informacional;

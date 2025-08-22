@@ -16,6 +16,7 @@ spring:
 
   sql:
     init:
+      schema-locations: classpath:reset_schema.sql,classpath:schema.sql
       mode: always
 
 logging:
