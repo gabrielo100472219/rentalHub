@@ -111,11 +111,9 @@ comment on column algoritmo.es_desplazamiento is 'Indica que el algoritmo se apl
 
 comment on column algoritmo.es_desplazamiento_base is 'Indica que el algoritmo se aplica sobre la tienda de la posición del desplazamiento.';
 
-create index ix_algoritmo_01
-    on algoritmo (es_desplazamiento);
 
-create index ix_algoritmo_02
-    on algoritmo (es_desplazamiento_base);
+
+
 
 grant delete, insert, select, update on table algoritmo to rcompensacion_comision;
 
@@ -502,8 +500,7 @@ create table estado_trabajo
     nombre            varchar(128) not null,
     peso              integer default 0,
     id_estado_tarea   integer             not null
-        constraint fk_estado_trabajo_estado_tarea
-            references estado_tarea);
+        );
 
 comment on table estado_trabajo is 'Tabla con los estados de los trabajos del cáluclo PENDIENTE-EN_CURSO-OK-KO';
 
@@ -515,8 +512,7 @@ comment on column estado_trabajo.peso is 'Peso, define el peso de un estado sobr
 
 comment on column estado_trabajo.id_estado_tarea is 'Identificador del estado de tarea correspondiente con el estado de trabajo';
 
-create index ix_estado_trabajo_estado_tarea
-    on estado_trabajo (id_estado_tarea);
+
 
 grant delete, insert, select, update on table estado_trabajo to rcompensacion_comision;
 
@@ -662,8 +658,7 @@ create table paralelo_peticion
         constraint pk_paralelo_peticion
             primary key,
     id_estado_paralelo_peticion   bigint                     not null
-        constraint fk_paralelo_peticion_estado_paralelo_peticion
-            references estado_paralelo_peticion,
+        ,
     id_organization               varchar(24) not null,
     ccl_id_origen                 varchar(24) not null,
     std_id_leg_ent                varchar(24) not null,
@@ -712,8 +707,7 @@ create table paralelo_comparativa_politicas
         constraint pk_paralelo_comparativa_politicas
             primary key,
     id_paralelo_peticion                bigint                     not null
-        constraint fk_paralelo_comparativa_politicas_paralelo_peticion
-            references paralelo_peticion,
+        ,
     fecha_calculo                       date                       not null,
     ccl_id_person                       varchar(24) not null,
     importe_comision_sin_baja_it_comis  numeric(23,8),
@@ -772,11 +766,9 @@ comment on column paralelo_comparativa_politicas.es_carencia_income is 'Indicado
 
 comment on column paralelo_comparativa_politicas.es_diferencia is 'Indicador de si la tupla presenta o no diferencias de importes';
 
-create index ix_paralelo_comparativa_politicas_01
-    on paralelo_comparativa_politicas (id_paralelo_peticion, es_diferencia);
 
-create index ix_paralelo_comparativa_politicas_paralelo_peticion
-    on paralelo_comparativa_politicas (id_paralelo_peticion);
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_politicas to rcompensacion_comision;
 
@@ -797,8 +789,7 @@ create table paralelo_comparativa_total
         constraint pk_paralelo_comparativa_total
             primary key,
     id_paralelo_peticion          bigint                     not null
-        constraint fk_paralelo_comparativa_total_paralelo_peticion
-            references paralelo_peticion,
+        ,
     ccl_id_person                 varchar(24) not null,
     importe_comis                 numeric(23,8),
     importe_income                numeric(23,8),
@@ -821,11 +812,9 @@ comment on column paralelo_comparativa_total.importe_diferencia is 'Diferencia d
 
 comment on column paralelo_comparativa_total.es_diferencia is 'Indicador de si la tupla presenta o no diferencias de importes.';
 
-create index ix_paralelo_comparativa_total_01
-    on paralelo_comparativa_total (id_paralelo_peticion, es_diferencia);
 
-create index ix_paralelo_comparativa_total_paralelo_peticion
-    on paralelo_comparativa_total (id_paralelo_peticion);
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_total to rcompensacion_comision;
 
@@ -841,8 +830,7 @@ grant select on table paralelo_comparativa_total to rreporting_sil_sistema_infor
 
 grant insert, select, update on table paralelo_comparativa_total to rmantenimiento_income;
 
-create index ix_paralelo_peticion_estado_paralelo_peticion
-    on paralelo_peticion (id_estado_paralelo_peticion);
+
 
 grant delete, insert, select, update on table paralelo_peticion to rcompensacion_comision;
 
@@ -980,14 +968,11 @@ comment on column punto_ejecucion.nombre is 'Nombre del punto de ejecución: Ant
 
 create table fase_accion
 (id_fase            integer not null
-        constraint fk_fase_accion_fase
-            references fase,
+        ,
     id_accion          integer not null
-        constraint fk_fase_accion_accion
-            references accion,
+        ,
     id_punto_ejecucion integer not null
-        constraint fk_fase_accion_punto_ejecucion
-            references punto_ejecucion,
+        ,
     peso               integer,
     constraint pk_fase_accion
         primary key (id_fase, id_accion));
@@ -1002,14 +987,11 @@ comment on column fase_accion.id_punto_ejecucion is 'Identificador del punto de 
 
 comment on column fase_accion.peso is 'Peso, define el peso de una fase acción sobre otras';
 
-create index ix_fase_accion_accion
-    on fase_accion (id_accion);
 
-create index ix_fase_accion_fase
-    on fase_accion (id_fase);
 
-create index ix_fase_accion_punto_ejecucion
-    on fase_accion (id_punto_ejecucion);
+
+
+
 
 grant delete, insert, select, update on table fase_accion to rcompensacion_comision;
 
@@ -1102,8 +1084,7 @@ create table programacion
         constraint pk_programacion
             primary key,
     id_tipo_ambito                 integer            not null
-        constraint fk_programacion_tipo_ambito
-            references tipo_ambito,
+        ,
     es_activo                      numeric(1)         not null,
     fecha_hora_creacion            timestamp(6)       not null,
     fecha_hora_siguiente_ejecucion timestamp(6)       not null,
@@ -1132,8 +1113,7 @@ comment on column programacion.programacion_huso is 'Huso horario de la programa
 
 comment on column programacion.nombre_usuario is 'Identificador del usuario que lanza el trabajo';
 
-create index ix_programacion_tipo_ambito
-    on programacion (id_tipo_ambito);
+
 
 grant delete, insert, select, update on table programacion to rcompensacion_comision;
 
@@ -1154,8 +1134,7 @@ create table programacion_ambito
         constraint pk_programacion_ambito
             primary key,
     id_programacion        bigint                     not null
-        constraint fk_programacion_ambito_programacion
-            references programacion,
+        ,
     id_organization        varchar(24) not null);
 
 comment on table programacion_ambito is 'Tabla con la relación de programaciones  Sociedad';
@@ -1166,8 +1145,7 @@ comment on column programacion_ambito.id_programacion is 'Identificador de la pr
 
 comment on column programacion_ambito.id_organization is 'Id. organización/sociedad, M4RCH_ORGANIZATION,Maestro de organizaciones';
 
-create index ix_programacion_ambito_programacion
-    on programacion_ambito (id_programacion);
+
 
 grant delete, insert, select, update on table programacion_ambito to rcompensacion_comision;
 
@@ -1188,8 +1166,7 @@ create table programacion_ambito_empresa
         constraint pk_programacion_ambito_empresa
             primary key,
     id_programacion_ambito         bigint                     not null
-        constraint fk_programacion_ambito_empresa_programacion_ambito
-            references programacion_ambito,
+        ,
     std_id_leg_ent                 varchar(24) not null);
 
 comment on table programacion_ambito_empresa is 'Tabla conla la relacion de programaciones empresa';
@@ -1200,8 +1177,7 @@ comment on column programacion_ambito_empresa.id_programacion_ambito is 'Identif
 
 comment on column programacion_ambito_empresa.std_id_leg_ent is 'Id empresa STD_LEG_ENT Maestro de empresas';
 
-create index ix_programacion_ambito_empresa_programacion_ambito
-    on programacion_ambito_empresa (id_programacion_ambito);
+
 
 grant delete, insert, select, update on table programacion_ambito_empresa to rcompensacion_comision;
 
@@ -1222,8 +1198,7 @@ create table programacion_ambito_localizacion
         constraint pk_programacion_ambito_localizacion
             primary key,
     id_programacion_ambito              bigint                     not null
-        constraint fk_programacion_ambito_localizacion_programacion_ambito
-            references programacion_ambito,
+        ,
     std_id_leg_ent                      varchar(24) not null,
     std_id_work_locat                   varchar(24) not null,
     ccl_id_origen                       varchar(24) not null);
@@ -1240,8 +1215,7 @@ comment on column programacion_ambito_localizacion.std_id_work_locat is 'Id. Lug
 
 comment on column programacion_ambito_localizacion.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_programacion_ambito_localizacion_programacion_ambito
-    on programacion_ambito_localizacion (id_programacion_ambito);
+
 
 grant delete, insert, select, update on table programacion_ambito_localizacion to rcompensacion_comision;
 
@@ -1262,8 +1236,7 @@ create table programacion_ambito_origen
         constraint pk_programacion_ambito_origen
             primary key,
     id_programacion_ambito        bigint                     not null
-        constraint fk_programacion_ambito_origen_programacion_ambito
-            references programacion_ambito,
+        ,
     ccl_id_origen                 varchar(24) not null);
 
 comment on table programacion_ambito_origen is 'Tabla con la relacion de programaciones origen';
@@ -1274,8 +1247,7 @@ comment on column programacion_ambito_origen.id_programacion_ambito is 'Identifi
 
 comment on column programacion_ambito_origen.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_programacion_ambito_origen_programacion_ambito
-    on programacion_ambito_origen (id_programacion_ambito);
+
 
 grant delete, insert, select, update on table programacion_ambito_origen to rcompensacion_comision;
 
@@ -1296,8 +1268,7 @@ create table programacion_ambito_persona
         constraint pk_programacion_ambito_persona
             primary key,
     id_programacion_ambito         bigint                     not null
-        constraint fk_programacion_ambito_persona_programacion_ambito
-            references programacion_ambito,
+        ,
     std_id_leg_ent                 varchar(24) not null,
     ccl_id_origen                  varchar(24) not null,
     ccl_id_person                  varchar(24) not null,
@@ -1317,8 +1288,7 @@ comment on column programacion_ambito_persona.ccl_id_person is 'Id. Local, viene
 
 comment on column programacion_ambito_persona.std_or_hr_period is 'Ordinal del periodo, vien de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_programacion_ambito_persona_programacion_ambito
-    on programacion_ambito_persona (id_programacion_ambito);
+
 
 grant delete, insert, select, update on table programacion_ambito_persona to rcompensacion_comision;
 
@@ -1394,11 +1364,9 @@ comment on column tipo_calculo.nombre is 'Descripcion del tipo de  cálculo';
 
 create table algoritmo_tipo_calculo
 (id_algoritmo    integer                    not null
-        constraint fk_algoritmo_tipo_calculo_algoritmo
-            references algoritmo,
+        ,
     id_tipo_calculo varchar(12) not null
-        constraint fk_algoritmo_tipo_calculo_tipo_calculo
-            references tipo_calculo,
+        ,
     constraint pk_algoritmo_tipo_calculo
         primary key (id_algoritmo, id_tipo_calculo));
 
@@ -1408,11 +1376,9 @@ comment on column algoritmo_tipo_calculo.id_algoritmo is 'Identificador del Algo
 
 comment on column algoritmo_tipo_calculo.id_tipo_calculo is 'Id. tipo cálculo, M4ICM_X_TP_CALCULO, Tabla maestro de tipos de claculo InCome';
 
-create index ix_algoritmo_tipo_calculo_algoritmo
-    on algoritmo_tipo_calculo (id_algoritmo);
 
-create index ix_algoritmo_tipo_calculo_tipo_calculo
-    on algoritmo_tipo_calculo (id_tipo_calculo);
+
+
 
 grant delete, insert, select, update on table algoritmo_tipo_calculo to rcompensacion_comision;
 
@@ -1447,8 +1413,7 @@ create table tipo_calculo_relacion_comis
         constraint pk_tipo_calculo_relacion_comis
             primary key,
     id_tipo_calculo                varchar(12) not null
-        constraint fk_tipo_calculo_relacion_comis_tipo_calculo
-            references tipo_calculo,
+        ,
     cod_tipo_calculo_comis         bigint                     not null);
 
 comment on table tipo_calculo_relacion_comis is 'Relacion entre los tipos de cálculo INCOME y los tipos de cálculo COMIS';
@@ -1464,11 +1429,9 @@ create table paralelo_comparativa_por_venta
         constraint pk_paralelo_comparativa_por_venta
             primary key,
     id_paralelo_peticion                               bigint                     not null
-        constraint fk_paralelo_comparativa_por_venta_paralelo_peticion
-            references paralelo_peticion,
+        ,
     id_tipo_calculo_relacion_comis                     bigint                     not null
-        constraint fk_paralelo_comparativa_por_venta_tipo_calculo_relacion_comis
-            references tipo_calculo_relacion_comis,
+        ,
     fecha_calculo                                      date                       not null,
     ccl_id_person                                      varchar(24) not null,
     cod_tienda_calculo_comis                           varchar(24),
@@ -1521,14 +1484,11 @@ create table paralelo_comparativa_por_venta
 
 comment on table paralelo_comparativa_por_venta is 'Resultados de las comparativas del paralelo de cálculo para los cálculos por venta y por venta individual.';
 
-create index ix_paralelo_comparativa_por_venta_01
-    on paralelo_comparativa_por_venta (id_paralelo_peticion, es_diferencia);
 
-create index ix_paralelo_comparativa_por_venta_paralelo_peticion
-    on paralelo_comparativa_por_venta (id_paralelo_peticion);
 
-create index ix_paralelo_comparativa_por_venta_tipo_calculo_relacion_comis
-    on paralelo_comparativa_por_venta (id_tipo_calculo_relacion_comis);
+
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_por_venta to rcompensacion_comision;
 
@@ -1544,8 +1504,7 @@ grant select on table paralelo_comparativa_por_venta to rreporting_sil_sistema_i
 
 grant insert, select, update on table paralelo_comparativa_por_venta to rmantenimiento_income;
 
-create index ix_tipo_calculo_relacion_comis_tipo_calculo
-    on tipo_calculo_relacion_comis (id_tipo_calculo);
+
 
 grant delete, insert, select, update on table tipo_calculo_relacion_comis to rcompensacion_comision;
 
@@ -1577,11 +1536,9 @@ comment on column tipo_comision.nombre is 'Descripcion del tipo de comisión';
 
 create table algoritmo_tipo_comision
 (id_algoritmo     integer                    not null
-        constraint fk_algoritmo_tipo_comision_algoritmo
-            references algoritmo,
+        ,
     id_tipo_comision varchar(12) not null
-        constraint fk_algoritmo_tipo_comision_tipo_comision
-            references tipo_comision,
+        ,
     constraint pk_algoritmo_tipo_comision
         primary key (id_algoritmo, id_tipo_comision));
 
@@ -1591,11 +1548,9 @@ comment on column algoritmo_tipo_comision.id_algoritmo is 'Identificador de los 
 
 comment on column algoritmo_tipo_comision.id_tipo_comision is 'Id. tipo comisión, M4ICM_X_TP_COMISION, Tabla maestro de tipos de comisión InCome';
 
-create index ix_algoritmo_tipo_comision_algoritmo
-    on algoritmo_tipo_comision (id_algoritmo);
 
-create index ix_algoritmo_tipo_comision_tipo_comision
-    on algoritmo_tipo_comision (id_tipo_comision);
+
+
 
 grant delete, insert, select, update on table algoritmo_tipo_comision to rcompensacion_comision;
 
@@ -1630,8 +1585,7 @@ create table tipo_comision_relacion_comis
         constraint pk_tipo_comision_relacion_comis
             primary key,
     id_tipo_comision                varchar(12) not null
-        constraint fk_tipo_comision_relacion_comis_tipo_comision
-            references tipo_comision,
+        ,
     cod_tipo_comision_comis         bigint                     not null);
 
 comment on table tipo_comision_relacion_comis is 'Relacion entre los tipos de comision INCOME y los tipo de porcentaje COMIS';
@@ -1647,14 +1601,11 @@ create table paralelo_comparativa_challenge
         constraint pk_paralelo_comparativa_challenge
             primary key,
     id_paralelo_peticion                         bigint                     not null
-        constraint fk_paralelo_comparativa_challenge_paralelo_peticion
-            references paralelo_peticion,
+        ,
     id_tipo_calculo_relacion_comis               bigint                     not null
-        constraint fk_paralelo_comparativa_challenge_tipo_calculo_relacion_comis
-            references tipo_calculo_relacion_comis,
+        ,
     id_tipo_comision_relacion_comis              bigint                     not null
-        constraint fk_paralelo_comparativa_challenge_tipo_comision_relacion_comis
-            references tipo_comision_relacion_comis,
+        ,
     fecha_calculo                                date                       not null,
     ccl_id_person                                varchar(24) not null,
     cod_tienda_calculo_comis                     varchar(24),
@@ -1813,17 +1764,13 @@ comment on column paralelo_comparativa_challenge.cod_opcion_calculo_comis is 'Op
 
 comment on column paralelo_comparativa_challenge.cod_opcion_calculo_income is 'Opción de cálculo en caso de desplazamiento en INCOME';
 
-create index ix_paralelo_comparativa_challenge_01
-    on paralelo_comparativa_challenge (id_paralelo_peticion, es_diferencia);
 
-create index ix_paralelo_comparativa_challenge_paralelo_peticion
-    on paralelo_comparativa_challenge (id_paralelo_peticion);
 
-create index ix_paralelo_comparativa_challenge_tipo_calculo_relacion_comis
-    on paralelo_comparativa_challenge (id_tipo_calculo_relacion_comis);
 
-create index ix_paralelo_comparativa_challenge_tipo_comision_relacion_comis
-    on paralelo_comparativa_challenge (id_tipo_comision_relacion_comis);
+
+
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_challenge to rcompensacion_comision;
 
@@ -1842,14 +1789,11 @@ create table paralelo_comparativa_detalle
         constraint pk_paralelo_comparativa_detalle
             primary key,
     id_paralelo_peticion                                            bigint                     not null
-        constraint fk_paralelo_comparativa_detalle_paralelo_peticion
-            references paralelo_peticion,
+        ,
     id_tipo_calculo_relacion_comis                                  bigint                     not null
-        constraint fk_paralelo_comparativa_detalle_tipo_calculo_relacion_comis
-            references tipo_calculo_relacion_comis,
+        ,
     id_tipo_comision_relacion_comis                                 bigint                     not null
-        constraint fk_paralelo_comparativa_detalle_tipo_comision_relacion_comis
-            references tipo_comision_relacion_comis,
+        ,
     fecha_calculo                                                   date                       not null,
     ccl_id_person                                                   varchar(24) not null,
     cod_tienda_calculo_comis                                        varchar(24) not null,
@@ -2068,17 +2012,13 @@ comment on column paralelo_comparativa_detalle.cod_opcion_calculo_comis is 'Opci
 
 comment on column paralelo_comparativa_detalle.cod_opcion_calculo_income is 'Opción de cálculo en caso de desplazamiento en INCOME.';
 
-create index ix_paralelo_comparativa_detalle_01
-    on paralelo_comparativa_detalle (id_paralelo_comparativa_detalle, id_tipo_comision_relacion_comis);
 
-create index ix_paralelo_comparativa_detalle_paralelo_peticion
-    on paralelo_comparativa_detalle (id_paralelo_peticion);
 
-create index ix_paralelo_comparativa_detalle_tipo_calculo_relacion_comis
-    on paralelo_comparativa_detalle (id_tipo_calculo_relacion_comis);
 
-create index ix_paralelo_comparativa_detalle_tipo_comision_relacion_comis
-    on paralelo_comparativa_detalle (id_tipo_comision_relacion_comis);
+
+
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_detalle to rcompensacion_comision;
 
@@ -2099,14 +2039,11 @@ create table paralelo_comparativa_precio_hora
         constraint pk_paralelo_comparativa_precio_hora
             primary key,
     id_paralelo_peticion                bigint                     not null
-        constraint fk_paralelo_comparativa_precio_hora_paralelo_peticion
-            references paralelo_peticion,
+        ,
     id_tipo_calculo_relacion_comis      bigint                     not null
-        constraint fk_paralelo_comparativa_precio_hora_tipo_calculo_relacion_comis
-            references tipo_calculo_relacion_comis,
+        ,
     id_tipo_comision_relacion_comis     bigint                     not null
-        constraint fk_p_c_p_h_tipo_comision_relacion_comis
-            references tipo_comision_relacion_comis,
+        ,
     fecha_calculo                       date                       not null,
     ccl_id_person                       varchar(24) not null,
     cod_tienda_calculo_comis            varchar(24),
@@ -2181,17 +2118,13 @@ comment on column paralelo_comparativa_precio_hora.cod_opcion_calculo_comis is '
 
 comment on column paralelo_comparativa_precio_hora.cod_opcion_calculo_income is 'Opción de cálculo en caso de desplazamiento en INCOME';
 
-create index ix_paralelo_comparativa_precio_hora_01
-    on paralelo_comparativa_precio_hora (id_paralelo_peticion, es_diferencia);
 
-create index ix_paralelo_comparativa_precio_hora_paralelo_peticion
-    on paralelo_comparativa_precio_hora (id_paralelo_peticion);
 
-create index ix_paralelo_comparativa_precio_hora_tipo_calculo_relacion_comis
-    on paralelo_comparativa_precio_hora (id_tipo_calculo_relacion_comis);
 
-create index ix_p_c_p_h_tipo_comision_relacion_comis
-    on paralelo_comparativa_precio_hora (id_tipo_comision_relacion_comis);
+
+
+
+
 
 grant delete, insert, select, update on table paralelo_comparativa_precio_hora to rcompensacion_comision;
 
@@ -2205,8 +2138,7 @@ grant select on table paralelo_comparativa_precio_hora to rreporting_sil_sistema
 
 grant insert, select, update on table paralelo_comparativa_precio_hora to rmantenimiento_income;
 
-create index ix_tipo_comision_relacion_comis_tipo_comision
-    on tipo_comision_relacion_comis (id_tipo_comision);
+
 
 grant delete, insert, select, update on table tipo_comision_relacion_comis to rcompensacion_comision;
 
@@ -2342,8 +2274,7 @@ create table algoritmo_ajuste
         constraint pk_algoritmo_ajuste
             primary key,
     id_tipo_politica    integer             not null
-        constraint fk_algoritmo_ajuste_tipo_politica
-            references tipo_politica,
+        ,
     es_activo           numeric(1)          not null,
     peso                integer default 0   not null,
     nombre              varchar(128) not null);
@@ -2368,8 +2299,7 @@ comment on column algoritmo_ajuste.nombre is 'Nombre del algoritmo globalTiendaP
 globalTiendaTopesV1
 globalTiendaManualV1';
 
-create index ix_algoritmo_ajuste_tipo_politica
-    on algoritmo_ajuste (id_tipo_politica);
+
 
 grant delete, insert, select, update on table algoritmo_ajuste to rcompensacion_comision;
 
@@ -2570,19 +2500,15 @@ create table proceso
         constraint pk_proceso
             primary key,
     id_estado_proceso         integer                    not null
-        constraint fk_proceso_estado_proceso
-            references estado_proceso,
+        ,
     id_organization           varchar(24) not null,
     icm_id_periodo            bigint                     not null,
     id_tipo_ambito            integer                    not null
-        constraint fk_proceso_tipo_ambito
-            references tipo_ambito,
+        ,
     id_tipo_proceso           integer                    not null
-        constraint fk_proceso_tipo_proceso
-            references tipo_proceso,
+        ,
     id_tipo_sistema_destino   integer                    not null
-        constraint fk_proceso_tipo_sistema_destino
-            references tipo_sistema_destino,
+        ,
     fecha_hora_creacion       timestamp(6)               not null,
     fecha_hora_inicio_proceso timestamp(6),
     fecha_hora_fin_proceso    timestamp(6),
@@ -2618,17 +2544,13 @@ comment on column proceso.fecha_fin_periodo is 'Fecha fin periodo';
 
 comment on column proceso.nombre_usuario is 'Identificador del usuario que lanza el proceso';
 
-create index ix_proceso_estado_proceso
-    on proceso (id_estado_proceso);
 
-create index ix_proceso_tipo_ambito
-    on proceso (id_tipo_ambito);
 
-create index ix_proceso_tipo_proceso
-    on proceso (id_tipo_proceso);
 
-create index ix_proceso_tipo_sistema_destino
-    on proceso (id_tipo_sistema_destino);
+
+
+
+
 
 grant delete, insert, select, update on table proceso to rcompensacion_comision;
 
@@ -2645,8 +2567,7 @@ create table proceso_ambito_empresa
         constraint pk_proceso_ambito_empresa
             primary key,
     id_proceso                bigint                     not null
-        constraint fk_proceso_ambito_empresa_proceso
-            references proceso,
+        ,
     ccl_id_origen             varchar(24) not null,
     std_id_leg_ent            varchar(24) not null);
 
@@ -2660,8 +2581,7 @@ comment on column proceso_ambito_empresa.ccl_id_origen is 'Id. Origen, M4CCL_ORI
 
 comment on column proceso_ambito_empresa.std_id_leg_ent is 'Id. Empresa, STD_LEG_ENT, Maestro de empresas';
 
-create index ix_proceso_ambito_empresa_proceso
-    on proceso_ambito_empresa (id_proceso);
+
 
 grant delete, insert, select, update on table proceso_ambito_empresa to rcompensacion_comision;
 
@@ -2678,8 +2598,7 @@ create table proceso_ambito_localizacion
         constraint pk_proceso_ambito_localizacion
             primary key,
     id_proceso                     bigint                     not null
-        constraint fk_proceso_ambito_localizacion_proceso
-            references proceso,
+        ,
     ccl_id_origen                  varchar(24) not null,
     std_id_leg_ent                 varchar(24) not null,
     std_id_work_locat              varchar(24) not null);
@@ -2696,8 +2615,7 @@ comment on column proceso_ambito_localizacion.std_id_leg_ent is 'Id. Empresa, ST
 
 comment on column proceso_ambito_localizacion.std_id_work_locat is 'Id. Lugar de trabajo, STD_WORK_LOCATION, Maestro de lugar de Trabajo';
 
-create index ix_proceso_ambito_localizacion_proceso
-    on proceso_ambito_localizacion (id_proceso);
+
 
 grant delete, insert, select, update on table proceso_ambito_localizacion to rcompensacion_comision;
 
@@ -2714,8 +2632,7 @@ create table proceso_ambito_origen
         constraint pk_proceso_ambito_origen
             primary key,
     id_proceso               bigint                     not null
-        constraint fk_proceso_ambito_origen_proceso
-            references proceso,
+        ,
     ccl_id_origen            varchar(24) not null);
 
 comment on table proceso_ambito_origen is 'Tabla con los procesos ejecutados por ambito origen';
@@ -2726,8 +2643,7 @@ comment on column proceso_ambito_origen.id_proceso is 'Identificador del proceso
 
 comment on column proceso_ambito_origen.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orígenes de sincronización';
 
-create index ix_proceso_ambito_origen_proceso
-    on proceso_ambito_origen (id_proceso);
+
 
 grant delete, insert, select, update on table proceso_ambito_origen to rcompensacion_comision;
 
@@ -2744,8 +2660,7 @@ create table proceso_ambito_persona
         constraint pk_proceso_ambito_persona
             primary key,
     id_proceso                bigint                     not null
-        constraint fk_proceso_ambito_persona_proceso
-            references proceso,
+        ,
     ccl_id_origen             varchar(24) not null,
     std_id_leg_ent            varchar(24) not null,
     ccl_id_person             varchar(24) not null,
@@ -2765,8 +2680,7 @@ comment on column proceso_ambito_persona.ccl_id_person is 'Id. Local, viene de S
 
 comment on column proceso_ambito_persona.std_or_hr_period is 'Ordinal del periodo, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_proceso_ambito_persona_proceso
-    on proceso_ambito_persona (id_proceso);
+
 
 grant delete, insert, select, update on table proceso_ambito_persona to rcompensacion_comision;
 
@@ -2850,11 +2764,9 @@ create table tipo_dato
         constraint pk_tipo_dato
             primary key,
     id_tipo_presencia integer
-        constraint fk_tipo_dato_tipo_presencia
-            references tipo_presencia,
+        ,
     id_tipo_venta     integer
-        constraint fk_tipo_dato_tipo_venta
-            references tipo_venta,
+        ,
     es_procesado      numeric(1)          not null,
     nombre            varchar(128) not null,
     descripcion       varchar(255) not null);
@@ -2875,11 +2787,9 @@ comment on column tipo_dato.descripcion is 'Desripción del tipo de dato';
 
 create table algoritmo_tipo_dato
 (id_algoritmo integer not null
-        constraint fk_algoritmo_tipo_dato_algoritmo
-            references algoritmo,
+        ,
     id_tipo_dato integer not null
-        constraint fk_algoritmo_tipo_dato_tipo_dato
-            references tipo_dato,
+        ,
     constraint pk_algoritmo_tipo_dato
         primary key (id_algoritmo, id_tipo_dato));
 
@@ -2889,11 +2799,9 @@ comment on column algoritmo_tipo_dato.id_algoritmo is 'Identificador de los tipo
 
 comment on column algoritmo_tipo_dato.id_tipo_dato is 'Identificadode del tipo de dato';
 
-create index ix_algoritmo_tipo_dato_algoritmo
-    on algoritmo_tipo_dato (id_algoritmo);
 
-create index ix_algoritmo_tipo_dato_tipo_dato
-    on algoritmo_tipo_dato (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table algoritmo_tipo_dato to rcompensacion_comision;
 
@@ -2909,11 +2817,9 @@ grant select on table algoritmo_tipo_dato to rreporting_sil_sistema_informaciona
 
 grant insert, select, update on table algoritmo_tipo_dato to rmantenimiento_income;
 
-create index ix_tipo_dato_tipo_presencia
-    on tipo_dato (id_tipo_presencia);
 
-create index ix_tipo_dato_tipo_venta
-    on tipo_dato (id_tipo_venta);
+
+
 
 grant select on table tipo_dato to rreporting_services_rrhh;
 
@@ -2945,11 +2851,9 @@ grant select on table tipo_dato to rmantenimiento_brechasala;
 
 create table tipo_grupo_dato_tipo_dato
 (id_tipo_grupo_dato integer not null
-        constraint fk_tipo_grupo_dato_tipo_dato_tipo_grupo_dato
-            references tipo_grupo_dato,
+        ,
     id_tipo_dato       integer not null
-        constraint fk_tipo_grupo_dato_tipo_dato_tipo_dato
-            references tipo_dato,
+        ,
     constraint pk_tipo_grupo_dato_tipo_dato
         primary key (id_tipo_grupo_dato, id_tipo_dato));
 
@@ -2959,11 +2863,9 @@ comment on column tipo_grupo_dato_tipo_dato.id_tipo_grupo_dato is 'Identificador
 
 comment on column tipo_grupo_dato_tipo_dato.id_tipo_dato is 'Identificadode del tipo de dato';
 
-create index ix_tipo_grupo_dato_tipo_dato_tipo_dato
-    on tipo_grupo_dato_tipo_dato (id_tipo_dato);
 
-create index ix_tipo_grupo_dato_tipo_dato_tipo_grupo_dato
-    on tipo_grupo_dato_tipo_dato (id_tipo_grupo_dato);
+
+
 
 grant select on table tipo_grupo_dato_tipo_dato to rreporting_services_rrhh;
 
@@ -3010,8 +2912,7 @@ create table tipo_venta_concepto
         constraint pk_tipo_venta_concepto
             primary key,
     id_tipo_venta          integer                    not null
-        constraint fk_tipo_venta_concepto_tipo_venta
-            references tipo_venta,
+        ,
     icm_id_concepto_venta  varchar(12) not null,
     nombre                 varchar(128)        not null,
     descripcion            varchar(255)        not null);
@@ -3032,8 +2933,7 @@ comment on column tipo_venta_concepto.nombre is 'Nombre del concepto';
 
 comment on column tipo_venta_concepto.descripcion is 'Descripcion de la concepto';
 
-create index ix_tipo_venta_concepto_tipo_venta
-    on tipo_venta_concepto (id_tipo_venta);
+
 
 grant delete, insert, select, update on table tipo_venta_concepto to rcompensacion_comision;
 
@@ -3054,8 +2954,7 @@ create table tipo_venta_concepto_challenge
         constraint pk_tipo_venta_concepto_challenge
             primary key,
     id_tipo_venta                    integer                    not null
-        constraint fk_tipo_venta_concepto_challenge_tipo_venta
-            references tipo_venta,
+        ,
     icm_id_concepto_venta            varchar(12) not null,
     nombre                           varchar(128)        not null,
     descripcion                      varchar(255)        not null);
@@ -3072,8 +2971,7 @@ comment on column tipo_venta_concepto_challenge.nombre is 'Nombre del concepto';
 
 comment on column tipo_venta_concepto_challenge.descripcion is 'Descripcion del concepto';
 
-create index ix_tipo_venta_concepto_challenge_tipo_venta
-    on tipo_venta_concepto_challenge (id_tipo_venta);
+
 
 grant select on table tipo_venta_concepto_challenge to rreporting_services_rrhh;
 
@@ -3130,14 +3028,11 @@ create table simulacion
     std_id_work_locat                         varchar(24) not null,
     fecha_hora_creacion                       timestamp(6)               not null,
     id_tipo_presencia_localizacion_simulacion integer default 1          not null
-        constraint fk_simulacion_tipo_presencia_localizacion_simulacion
-            references tipo_presencia_localizacion_simulacion,
+        ,
     id_tipo_presencia_persona_simulacion      integer default 1          not null
-        constraint fk_simulacion_tipo_presencia_persona_simulacion
-            references tipo_presencia_persona_simulacion,
+        ,
     id_tipo_venta_localizacion_simulacion     integer default 1          not null
-        constraint fk_simulacion_tipo_venta_localizacion_simulacion
-            references tipo_venta_localizacion_simulacion);
+        );
 
 comment on table simulacion is 'Tabla con los datos de cada simulacion';
 
@@ -3173,11 +3068,9 @@ comment on column simulacion.id_tipo_presencia_persona_simulacion is 'Identifica
 
 comment on column simulacion.id_tipo_venta_localizacion_simulacion is 'Identificador de tipos de venta por tienda utilizada en la simulacion';
 
-create index ix_simulacion_tipo_presencia_persona_simulacion
-    on simulacion (id_tipo_presencia_persona_simulacion);
 
-create index ix_simulacion_tipo_venta_localizacion_simulacion
-    on simulacion (id_tipo_venta_localizacion_simulacion);
+
+
 
 grant delete, insert, select, update on table simulacion to rcompensacion_comision;
 
@@ -3191,11 +3084,9 @@ grant insert, select, update on table simulacion to rmantenimiento_income;
 
 create table simulacion_condicion
 (id_simulacion bigint
-        constraint fk_simulacion_condicion_simulacion
-            references simulacion,
+        ,
     id_condicion  bigint
-        constraint fk_simulacion_condicion_condicion
-            references condicion);
+        );
 
 comment on table simulacion_condicion is 'Tabla con la relación entre condiciones y simulación';
 
@@ -3203,11 +3094,9 @@ comment on column simulacion_condicion.id_simulacion is 'Identificador de la sim
 
 comment on column simulacion_condicion.id_condicion is 'Identificador de la condicion';
 
-create index ix_simulacion_condicion_condicion
-    on simulacion_condicion (id_condicion);
 
-create index ix_simulacion_condicion_simulacion
-    on simulacion_condicion (id_simulacion);
+
+
 
 grant delete, insert, select, update on table simulacion_condicion to rcompensacion_comision;
 
@@ -3224,8 +3113,7 @@ create table simulacion_localizacion_banda_excepcion
         constraint pk_simulacion_localizacion_banda_excepcion
             primary key,
     id_simulacion                              bigint                     not null
-        constraint fk_simulacion_localizacion_banda_excepcion_simulacion
-            references simulacion,
+        ,
     ccl_id_cod_origen                          varchar(24) not null,
     banda                                      integer                    not null,
     ccl_id_seccion                             varchar(2));
@@ -3242,8 +3130,7 @@ comment on column simulacion_localizacion_banda_excepcion.banda is 'Banda con la
 
 comment on column simulacion_localizacion_banda_excepcion.ccl_id_seccion is 'Identificador de la seccion, M4CCL_OR_SECCIONES, Maestro Meta4 secciones';
 
-create index ix_simulacion_localizacion_banda_excepcion_simulacion
-    on simulacion_localizacion_banda_excepcion (id_simulacion);
+
 
 grant delete, insert, select, update on table simulacion_localizacion_banda_excepcion to rcompensacion_comision;
 
@@ -3266,8 +3153,7 @@ create table tipo_venta_relacion_comis
         constraint pk_tipo_venta_relacion_comis
             primary key,
     id_tipo_venta                bigint             not null
-        constraint fk_tipo_venta_relacion_comis_tipo_venta
-            references tipo_venta,
+        ,
     cod_tipo_venta_comis         varchar(40) not null);
 
 comment on table tipo_venta_relacion_comis is 'Relacion entre los tipos de venta INCOME y los tipo de porcentaje COMIS';
@@ -3278,8 +3164,7 @@ comment on column tipo_venta_relacion_comis.id_tipo_venta is 'Identificador del 
 
 comment on column tipo_venta_relacion_comis.cod_tipo_venta_comis is 'Columna asociada al tipo de venta COMIS';
 
-create index ix_tipo_venta_relacion_comis_tipo_venta
-    on tipo_venta_relacion_comis (id_tipo_venta);
+
 
 grant delete, insert, select, update on table tipo_venta_relacion_comis to rcompensacion_comision;
 
@@ -3300,11 +3185,9 @@ create table trabajo
         constraint pk_trabajo
             primary key,
     id_programacion           bigint
-        constraint fk_trabajo_programacion
-            references programacion,
+        ,
     id_tipo_ambito            integer                    not null
-        constraint fk_trabajo_tipo_ambito
-            references tipo_ambito,
+        ,
     icm_id_periodo            bigint                     not null,
     id_organization           varchar(24) not null,
     nombre_usuario            varchar(32)         not null,
@@ -3312,13 +3195,11 @@ create table trabajo
     fecha_inicio_periodo      date                       not null,
     fecha_fin_periodo         date                       not null,
     id_estado_trabajo         integer                    not null
-        constraint fk_trabajo_estado_trabajo
-            references estado_trabajo,
+        ,
     fecha_hora_inicio_trabajo timestamp(6),
     fecha_hora_fin_trabajo    timestamp(6),
     id_simulacion             bigint
-        constraint fk_trabajo_simulacion
-            references simulacion);
+        );
 
 comment on table trabajo is 'Tabla con los trabajaos de cálculo';
 
@@ -3353,11 +3234,9 @@ create table tarea
         constraint pk_tarea
             primary key,
     id_estado_tarea         integer                    not null
-        constraint fk_tarea_estado_tarea
-            references estado_tarea,
+        ,
     id_trabajo              bigint                     not null
-        constraint fk_tarea_trabajo
-            references trabajo,
+        ,
     fecha_hora_creacion     timestamp(6)               not null,
     fecha_hora_inicio_tarea timestamp(6),
     fecha_hora_fin_tarea    timestamp(6),
@@ -3395,14 +3274,11 @@ create table periodo_calculo_persona
     ccl_id_person            varchar(24) not null,
     std_or_hr_period         varchar(24) not null,
     id_estado                integer                    not null
-        constraint fk_periodo_calculo_persona_estado_periodo_calculo_persona
-            references estado_periodo_calculo_persona,
+        ,
     id_tarea_actual          bigint                     not null
-        constraint fk_periodo_calculo_persona_tarea_actual
-            references tarea,
+        ,
     id_tarea_ultima          bigint                     not null
-        constraint fk_periodo_calculo_persona_tarea_ultima
-            references tarea,
+        ,
     es_bloqueado             numeric(1)                 not null,
     fecha_hora_actualizacion timestamp(6)               not null,
     fecha_hora_creacion      timestamp(6)               not null,
@@ -3433,20 +3309,15 @@ comment on column periodo_calculo_persona.fecha_hora_actualizacion is 'Fecha de 
 
 comment on column periodo_calculo_persona.fecha_hora_creacion is 'Fecha de creación';
 
-create index ix_periodo_calculo_persona_01
-    on periodo_calculo_persona (es_bloqueado);
 
-create index ix_periodo_calculo_persona_02
-    on periodo_calculo_persona (ccl_id_person, std_or_hr_period);
 
-create index ix_periodo_calculo_persona_estado_periodo_calculo_persona
-    on periodo_calculo_persona (id_estado);
 
-create index ix_periodo_calculo_persona_tarea_actual
-    on periodo_calculo_persona (id_tarea_actual);
 
-create index ix_periodo_calculo_persona_tarea_ultima
-    on periodo_calculo_persona (id_tarea_ultima);
+
+
+
+
+
 
 grant select on table periodo_calculo_persona to rreporting_services_rrhh;
 
@@ -3483,8 +3354,7 @@ create table periodo_calculo_persona_reexport
     ccl_id_person            varchar(24) not null,
     std_or_hr_period         varchar(24) not null,
     id_tarea                 bigint                     not null
-        constraint fk_periodo_calculo_persona_reexport_tarea
-            references tarea,
+        ,
     fecha_hora_actualizacion timestamp(10) not null,
     constraint pk_periodo_calculo_persona_reexport
         primary key (icm_id_periodo, ccl_id_origen, std_id_leg_ent, ccl_id_person, std_or_hr_period, id_tarea));
@@ -3500,8 +3370,7 @@ create table periodo_consolidar_tarea
     ccl_id_origen       varchar(24) not null,
     std_id_leg_ent      varchar(24) not null,
     id_tarea            bigint                     not null
-        constraint fk_periodo_consolidar_tarea
-            references tarea,
+        ,
     fecha_hora_creacion timestamp(6)               not null,
     constraint pk_periodo_consolidar
         primary key (icm_id_periodo, ccl_id_origen, std_id_leg_ent, id_tarea));
@@ -3518,8 +3387,7 @@ comment on column periodo_consolidar_tarea.id_tarea is 'identificador de la tare
 
 comment on column periodo_consolidar_tarea.fecha_hora_creacion is 'Fecha de creación';
 
-create index ix_periodo_consolidar_tarea_tarea
-    on periodo_consolidar_tarea (id_tarea);
+
 
 grant delete, insert, select, update on table periodo_consolidar_tarea to rcompensacion_comision;
 
@@ -3527,11 +3395,9 @@ grant select on table periodo_consolidar_tarea to rmonitorizacion_compensacion_c
 
 grant insert, select, update on table periodo_consolidar_tarea to rmantenimiento_income;
 
-create index ix_tarea_estado_tarea
-    on tarea (id_estado_tarea);
 
-create index ix_tarea_trabajo
-    on tarea (id_trabajo);
+
+
 
 grant select on table tarea to rreporting_services_rrhh;
 
@@ -3566,8 +3432,7 @@ create table tarea_agrupacion_cadena
         constraint pk_tarea_agrupacion_cadena
             primary key,
     id_tarea                   bigint                     not null
-        constraint fk_tarea_agrupacion_cadena_tarea
-            references tarea,
+        ,
     icm_id_agrupacion_online   bigint                     not null,
     ccl_id_cadena              varchar(24) not null,
     ccl_id_origen              varchar(24) not null,
@@ -3587,11 +3452,9 @@ comment on column tarea_agrupacion_cadena.ccl_id_origen is 'Id. Origen, M4CCL_OR
 
 comment on column tarea_agrupacion_cadena.es_multiple is 'Indicador de es una multiple';
 
-create index ix_tarea_agrupacion_cadena_01
-    on tarea_agrupacion_cadena (id_tarea, ccl_id_cadena);
 
-create index ix_tarea_agrupacion_cadena_tarea
-    on tarea_agrupacion_cadena (id_tarea);
+
+
 
 grant select on table tarea_agrupacion_cadena to rreporting_services_rrhh;
 
@@ -3618,11 +3481,9 @@ create table tarea_agrupacion_configuracion
         constraint pk_tarea_agrupacion_configuracion
             primary key,
     id_tarea                          bigint                     not null
-        constraint fk_tarea_agrupacion_configuracion_tarea
-            references tarea,
+        ,
     id_tipo_venta_concepto            integer                    not null
-        constraint fk_tarea_agrupacion_configuracion_tipo_venta_concepto
-            references tipo_venta_concepto,
+        ,
     fecha_fin                         date                       not null,
     fecha_inicio                      date                       not null,
     icm_id_agrupacion_online          bigint                     not null,
@@ -3647,11 +3508,9 @@ comment on column tarea_agrupacion_configuracion.ccl_id_origen is 'Id. Origen, M
 
 comment on column tarea_agrupacion_configuracion.porcentaje_inclusion is 'Porcentaje que aplica para la venta online';
 
-create index ix_tarea_agrupacion_configuracion_tarea
-    on tarea_agrupacion_configuracion (id_tarea);
 
-create index ix_tarea_agrupacion_configuracion_tipo_venta_concepto
-    on tarea_agrupacion_configuracion (id_tipo_venta_concepto);
+
+
 
 grant select on table tarea_agrupacion_configuracion to rreporting_services_rrhh;
 
@@ -3674,12 +3533,10 @@ create table tarea_agrupacion_configuracion_challenge_tipo_venta
         constraint pk_tarea_agrupacion_configuracion_challenge_tipo_venta
             primary key,
     id_tarea                                               bigint                     not null
-        constraint fk_tarea_agrupacion_configuracion_challenge_tipo_venta_tarea
-            references tarea,
+        ,
     icm_id_agrupacion_online                               bigint                     not null,
     id_tipo_venta_concepto_challenge                       integer                    not null
-        constraint fk_t_a_c_c_t_v_tipo_venta_concepto_challenge
-            references tipo_venta_concepto_challenge,
+        ,
     fecha_inicio                                           date                       not null,
     fecha_fin                                              date                       not null,
     ccl_id_origen                                          varchar(24) not null);
@@ -3700,14 +3557,11 @@ comment on column tarea_agrupacion_configuracion_challenge_tipo_venta.fecha_fin 
 
 comment on column tarea_agrupacion_configuracion_challenge_tipo_venta.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_tarea_agrupacion_configuracion_challenge_tipo_venta_01
-    on tarea_agrupacion_configuracion_challenge_tipo_venta (id_tarea, ccl_id_origen, id_tipo_venta_concepto_challenge);
 
-create index ix_tarea_agrupacion_configuracion_challenge_tipo_venta_tarea
-    on tarea_agrupacion_configuracion_challenge_tipo_venta (id_tarea);
 
-create index ix_t_a_c_c_t_v_tipo_venta_concepto_challenge
-    on tarea_agrupacion_configuracion_challenge_tipo_venta (id_tipo_venta_concepto_challenge);
+
+
+
 
 grant select on table tarea_agrupacion_configuracion_challenge_tipo_venta to rreporting_services_rrhh;
 
@@ -3734,11 +3588,9 @@ create table tarea_agrupacion_presencia
         constraint pk_tarea_agrupacion_presencia
             primary key,
     id_tarea                      bigint                                not null
-        constraint fk_tarea_agrupacion_presencia_tarea
-            references tarea,
+        ,
     id_tipo_dato                  integer                               not null
-        constraint fk_tarea_agrupacion_presencia_tipo_dato
-            references tipo_dato,
+        ,
     es_activo                     numeric(1)                            not null,
     fecha                         date                                  not null,
     icm_id_agrupacion_online      bigint                                not null,
@@ -3766,11 +3618,9 @@ comment on column tarea_agrupacion_presencia.minutos is 'Tiempo en minutos de pr
 
 comment on column tarea_agrupacion_presencia.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orígenes de sincronización';
 
-create index ix_tarea_agrupacion_presencia_tarea
-    on tarea_agrupacion_presencia (id_tarea);
 
-create index ix_tarea_agrupacion_presencia_tipo_dato
-    on tarea_agrupacion_presencia (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table tarea_agrupacion_presencia to rcompensacion_comision;
 
@@ -3791,11 +3641,9 @@ create table tarea_agrupacion_venta
         constraint pk_tarea_agrupacion_venta
             primary key,
     id_tarea                  bigint                                not null
-        constraint fk_tarea_agrupacion_venta_tarea
-            references tarea,
+        ,
     id_tipo_dato              integer                               not null
-        constraint fk_tarea_agrupacion_venta_tipo_dato
-            references tipo_dato,
+        ,
     es_activo                 numeric(1)                            not null,
     fecha                     date                                  not null,
     icm_id_agrupacion_online  bigint                                not null,
@@ -3826,11 +3674,9 @@ comment on column tarea_agrupacion_venta.importe_con_impuestos is 'Importe con i
 
 comment on column tarea_agrupacion_venta.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orígenes de sincronización';
 
-create index ix_tarea_agrupacion_venta_tarea
-    on tarea_agrupacion_venta (id_tarea);
 
-create index ix_tarea_agrupacion_venta_tipo_dato
-    on tarea_agrupacion_venta (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table tarea_agrupacion_venta to rcompensacion_comision;
 
@@ -3851,8 +3697,7 @@ create table tarea_ambito
         constraint pk_tarea_ambito
             primary key,
     id_tarea        bigint                     not null
-        constraint fk_tarea_ambito_tarea
-            references tarea,
+        ,
     ccl_id_origen   varchar(24) not null);
 
 comment on table tarea_ambito is 'Tabla de ralacion entre el ambito y las tareas de del trabajo';
@@ -3863,8 +3708,7 @@ comment on column tarea_ambito.id_tarea is 'Identificador de la tarea';
 
 comment on column tarea_ambito.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_tarea_ambito_tarea
-    on tarea_ambito (id_tarea);
+
 
 grant select on table tarea_ambito to rreporting_services_rrhh;
 
@@ -3887,8 +3731,7 @@ create table tarea_ambito_global_empresa
         constraint pk_tarea_ambito_global_empresa
             primary key,
     id_tarea                       bigint                     not null
-        constraint fk_tarea_ambito_global_empresa_tarea
-            references tarea,
+        ,
     ccl_id_origen                  varchar(24) not null,
     std_id_leg_ent                 varchar(24) not null);
 
@@ -3902,8 +3745,7 @@ comment on column tarea_ambito_global_empresa.ccl_id_origen is 'Id. Origen, M4CC
 
 comment on column tarea_ambito_global_empresa.std_id_leg_ent is 'Id empresa STD_LEG_ENT Maestro de empresas';
 
-create index ix_tarea_ambito_global_empresa_tarea
-    on tarea_ambito_global_empresa (id_tarea);
+
 
 grant delete, insert, select, update on table tarea_ambito_global_empresa to rcompensacion_comision;
 
@@ -3924,13 +3766,11 @@ create table tarea_ambito_global_fecha
         constraint pk_tarea_ambito_global_fecha
             primary key,
     id_tarea                     bigint  not null
-        constraint fk_tarea_ambito_global_fecha_tarea
-            references tarea,
+        ,
     fecha_inicio                 date    not null,
     fecha_fin                    date    not null,
     id_tipo_dato                 integer not null
-        constraint fk_tarea_ambito_global_fecha_tipo_dato
-            references tipo_dato);
+        );
 
 comment on table tarea_ambito_global_fecha is 'Tabla con la agrupación de tareas agrupadas por fecha';
 
@@ -3944,11 +3784,9 @@ comment on column tarea_ambito_global_fecha.fecha_fin is 'Fecha fin periodo de r
 
 comment on column tarea_ambito_global_fecha.id_tipo_dato is 'Identificadode del tipo de dato';
 
-create index ix_tarea_ambito_global_fecha_tarea
-    on tarea_ambito_global_fecha (id_tarea);
 
-create index ix_tarea_ambito_global_fecha_tipo_dato
-    on tarea_ambito_global_fecha (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_fecha to rcompensacion_comision;
 
@@ -3969,8 +3807,7 @@ create table tarea_ambito_global_localizacion
         constraint pk_tarea_ambito_global_localizacion
             primary key,
     id_tarea                            bigint                     not null
-        constraint fk_tarea_ambito_global_localizacion_tarea
-            references tarea,
+        ,
     std_id_leg_ent                      varchar(24) not null,
     std_id_work_locat                   varchar(24) not null,
     ccl_id_origen                       varchar(24) not null);
@@ -3987,11 +3824,9 @@ comment on column tarea_ambito_global_localizacion.std_id_work_locat is 'Id. Lug
 
 comment on column tarea_ambito_global_localizacion.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_tarea_ambito_global_localizacion_01
-    on tarea_ambito_global_localizacion (id_tarea, std_id_work_locat);
 
-create index ix_tarea_ambito_global_localizacion_tarea
-    on tarea_ambito_global_localizacion (id_tarea);
+
+
 
 grant select on table tarea_ambito_global_localizacion to rreporting_services_rrhh;
 
@@ -4018,8 +3853,7 @@ create table tarea_ambito_global_localizacion_persona
         constraint pk_tarea_ambito_global_localizacion_persona
             primary key,
     id_tarea                                    bigint                     not null
-        constraint fk_tarea_ambito_global_localizacion_persona_tarea
-            references tarea,
+        ,
     std_id_leg_ent                              varchar(24) not null,
     std_id_work_locat                           varchar(24) not null,
     ccl_id_origen                               varchar(24) not null,
@@ -4039,14 +3873,11 @@ comment on column tarea_ambito_global_localizacion_persona.ccl_id_origen is 'Id.
 
 comment on column tarea_ambito_global_localizacion_persona.ccl_id_person is 'Id. Local, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_global_localizacion_persona_01
-    on tarea_ambito_global_localizacion_persona (id_tarea, ccl_id_person, std_id_work_locat);
 
-create index ix_tarea_ambito_global_localizacion_persona_02
-    on tarea_ambito_global_localizacion_persona (id_tarea, std_id_work_locat, ccl_id_person);
 
-create index ix_tarea_ambito_global_localizacion_persona_tarea
-    on tarea_ambito_global_localizacion_persona (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_localizacion_persona to rcompensacion_comision;
 
@@ -4067,8 +3898,7 @@ create table tarea_ambito_global_localizacion_persona_desplazamiento
         constraint pk_tarea_ambito_global_localizacion_persona_desplazamiento
             primary key,
     id_tarea                                                   bigint                     not null
-        constraint fk_t_a_g_l_p_d_tarea
-            references tarea,
+        ,
     std_id_leg_ent                                             varchar(24) not null,
     std_id_work_locat                                          varchar(24) not null,
     ccl_id_origen                                              varchar(24) not null,
@@ -4088,14 +3918,11 @@ comment on column tarea_ambito_global_localizacion_persona_desplazamiento.ccl_id
 
 comment on column tarea_ambito_global_localizacion_persona_desplazamiento.ccl_id_person is 'Id. Local, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_global_localizacion_persona_desplazamiento_01
-    on tarea_ambito_global_localizacion_persona_desplazamiento (id_tarea, ccl_id_person, std_id_work_locat);
 
-create index ix_tarea_ambito_global_localizacion_persona_desplazamiento_02
-    on tarea_ambito_global_localizacion_persona_desplazamiento (id_tarea, std_id_work_locat, ccl_id_person);
 
-create index ix_t_a_g_l_p_d_tarea
-    on tarea_ambito_global_localizacion_persona_desplazamiento (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_localizacion_persona_desplazamiento to rcompensacion_comision;
 
@@ -4116,8 +3943,7 @@ create table tarea_ambito_global_localizacion_persona_presencia
         constraint pk_tarea_ambito_global_localizacion_persona_presencia
             primary key,
     id_tarea                                              bigint                     not null
-        constraint fk_tarea_ambito_global_localizacion_persona_presencia_tarea
-            references tarea,
+        ,
     std_id_leg_ent                                        varchar(24) not null,
     ccl_id_cod_origen                                     varchar(24) not null,
     ccl_id_origen                                         varchar(24) not null,
@@ -4137,14 +3963,11 @@ comment on column tarea_ambito_global_localizacion_persona_presencia.ccl_id_orig
 
 comment on column tarea_ambito_global_localizacion_persona_presencia.ccl_id_person is 'Id. Local, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_global_localizacion_persona_presencia_01
-    on tarea_ambito_global_localizacion_persona_presencia (id_tarea, ccl_id_person, ccl_id_cod_origen);
 
-create index ix_tarea_ambito_global_localizacion_persona_presencia_02
-    on tarea_ambito_global_localizacion_persona_presencia (id_tarea, ccl_id_cod_origen, ccl_id_person);
 
-create index ix_tarea_ambito_global_localizacion_persona_presencia_tarea
-    on tarea_ambito_global_localizacion_persona_presencia (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_localizacion_persona_presencia to rcompensacion_comision;
 
@@ -4165,8 +3988,7 @@ create table tarea_ambito_global_localizacion_persona_presencia_manual
         constraint pk_tarea_ambito_global_localizacion_persona_presencia_manual
             primary key,
     id_tarea                                                     bigint                     not null
-        constraint fk_t_a_g_l_p_p_m_tarea
-            references tarea,
+        ,
     std_id_leg_ent                                               varchar(24) not null,
     std_id_work_locat                                            varchar(24) not null,
     ccl_id_origen                                                varchar(24) not null,
@@ -4186,14 +4008,11 @@ comment on column tarea_ambito_global_localizacion_persona_presencia_manual.ccl_
 
 comment on column tarea_ambito_global_localizacion_persona_presencia_manual.ccl_id_person is 'Id. Local, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_global_localizacion_persona_presencia_manual_01
-    on tarea_ambito_global_localizacion_persona_presencia_manual (id_tarea, ccl_id_person, std_id_work_locat);
 
-create index ix_tarea_ambito_global_localizacion_persona_presencia_manual_02
-    on tarea_ambito_global_localizacion_persona_presencia_manual (id_tarea, std_id_work_locat, ccl_id_person);
 
-create index ix_t_a_g_l_p_p_m_tarea
-    on tarea_ambito_global_localizacion_persona_presencia_manual (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_localizacion_persona_presencia_manual to rcompensacion_comision;
 
@@ -4214,8 +4033,7 @@ create table tarea_ambito_global_persona
         constraint pk_tarea_ambito_global_persona
             primary key,
     id_tarea                       bigint                     not null
-        constraint fk_tarea_ambito_global_persona_tarea
-            references tarea,
+        ,
     std_id_leg_ent                 varchar(24) not null,
     ccl_id_origen                  varchar(24) not null,
     ccl_id_person                  varchar(24) not null);
@@ -4232,11 +4050,9 @@ comment on column tarea_ambito_global_persona.ccl_id_origen is 'Id. Origen, M4CC
 
 comment on column tarea_ambito_global_persona.ccl_id_person is 'Id. Local, viene de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_global_persona_01
-    on tarea_ambito_global_persona (id_tarea, ccl_id_person);
 
-create index ix_tarea_ambito_global_persona_tarea
-    on tarea_ambito_global_persona (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_ambito_global_persona to rcompensacion_comision;
 
@@ -4257,8 +4073,7 @@ create table tarea_ambito_localizacion
         constraint pk_tarea_ambito_localizacion
             primary key,
     id_tarea                     bigint                     not null
-        constraint fk_tarea_ambito_localizacion_tarea
-            references tarea,
+        ,
     std_id_work_locat            varchar(24) not null,
     ccl_id_origen                varchar(24) not null);
 
@@ -4272,11 +4087,9 @@ comment on column tarea_ambito_localizacion.std_id_work_locat is 'Id. Lugar de t
 
 comment on column tarea_ambito_localizacion.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_tarea_ambito_localizacion_01
-    on tarea_ambito_localizacion (id_tarea, std_id_work_locat);
 
-create index ix_tarea_ambito_localizacion_tarea
-    on tarea_ambito_localizacion (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_ambito_localizacion to rcompensacion_comision;
 
@@ -4297,8 +4110,7 @@ create table tarea_ambito_persona
         constraint pk_tarea_ambito_persona
             primary key,
     id_tarea                bigint                     not null
-        constraint fk_tarea_ambito_persona_tarea
-            references tarea,
+        ,
     ccl_id_origen           varchar(24) not null,
     ccl_id_person           varchar(24) not null,
     std_or_hr_period        varchar(24) not null);
@@ -4315,11 +4127,9 @@ comment on column tarea_ambito_persona.ccl_id_person is 'Id. Local, viene de STD
 
 comment on column tarea_ambito_persona.std_or_hr_period is 'Ordinal del periodo, vien de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_ambito_persona_01
-    on tarea_ambito_persona (id_tarea, ccl_id_person);
 
-create index ix_tarea_ambito_persona_tarea
-    on tarea_ambito_persona (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_ambito_persona to rcompensacion_comision;
 
@@ -4339,8 +4149,7 @@ create table tarea_calculo_ajuste_comision
 (id_tarea_calculo_ajuste_comision bigint generated always as identity (start with 1),
     fecha_inicio_periodo             date                       not null,
     id_tarea                         bigint                     not null
-        constraint fk_tarea_calculo_ajuste_comision_tarea
-            references tarea,
+        ,
     ccl_id_person                    varchar(24) not null,
     std_or_hr_period                 varchar(24) not null,
     importe                          numeric(23,8)             not null,
@@ -4367,11 +4176,9 @@ comment on column tarea_calculo_ajuste_comision.id_tipo_comision is 'Id. tipo co
 
 comment on column tarea_calculo_ajuste_comision.fecha is 'Fecha correspondiente al día del  periodo para el que se cálculo y existe importe';
 
-create index ix_tarea_calculo_ajuste_comision_01
-    on tarea_calculo_ajuste_comision (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, fecha);
 
-create index ix_tarea_calculo_ajuste_comision_tarea
-    on tarea_calculo_ajuste_comision (id_tarea);
+
+
 
 grant select on table tarea_calculo_ajuste_comision to rreporting_services_rrhh;
 
@@ -4394,11 +4201,9 @@ create table tarea_calculo_persona
         constraint pk_tarea_calculo_persona
             primary key,
     id_estado                integer                    not null
-        constraint fk_tarea_calculo_persona_estado_tarea_persona
-            references estado_tarea_persona,
+        ,
     id_tarea                 bigint                     not null
-        constraint fk_tarea_calculo_persona_tarea
-            references tarea,
+        ,
     ccl_id_origen            varchar(24) not null,
     ccl_id_person            varchar(24) not null,
     std_or_hr_period         varchar(24) not null);
@@ -4417,14 +4222,11 @@ comment on column tarea_calculo_persona.ccl_id_person is 'Id. Local, viene de ST
 
 comment on column tarea_calculo_persona.std_or_hr_period is 'Ordinal del periodo, vien de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_tarea_calculo_persona_01
-    on tarea_calculo_persona (id_tarea, ccl_id_person, std_or_hr_period);
 
-create index ix_tarea_calculo_persona_estado_tarea_persona
-    on tarea_calculo_persona (id_estado);
 
-create index ix_tarea_calculo_persona_tarea
-    on tarea_calculo_persona (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_calculo_persona to rcompensacion_comision;
 
@@ -4445,8 +4247,7 @@ create table tarea_configuracion
         constraint pk_tarea_configuracion
             primary key,
     id_tarea                 bigint
-        constraint fk_tarea_configuracion_tarea
-            references tarea,
+        ,
     ccl_id_origen            varchar(24) not null,
     fecha_fin                date                       not null,
     fecha_inicio             date                       not null,
@@ -4476,8 +4277,7 @@ comment on column tarea_configuracion.icm_ck_inc_iva_eval_ptpo is 'Check de eval
 
 comment on column tarea_configuracion.icm_ck_red_jornada is 'Check que indica si se aplica reducción de jornada, M4ICM_CONF_PARAMETROS_SOC.ICM_CK_RED_JORNADA';
 
-create index ix_tarea_configuracion_tarea
-    on tarea_configuracion (id_tarea);
+
 
 grant select on table tarea_configuracion to rreporting_services_rrhh;
 
@@ -4504,8 +4304,7 @@ create table tarea_configuracion_challenge_dias_minimos
         constraint pk_tarea_configuracion_challenge_dias_minimos
             primary key,
     id_tarea                                      bigint                     not null
-        constraint fk_tarea_configuracion_challenge_dias_minimos_tarea
-            references tarea,
+        ,
     icm_id_tp_calculo                             varchar(24) not null,
     icm_min_num_days                              integer                    not null,
     fecha_inicio                                  date                       not null,
@@ -4528,11 +4327,9 @@ comment on column tarea_configuracion_challenge_dias_minimos.fecha_fin is 'Fecha
 
 comment on column tarea_configuracion_challenge_dias_minimos.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orígenes de sincronización';
 
-create index ix_tarea_configuracion_challenge_dias_minimos_01
-    on tarea_configuracion_challenge_dias_minimos (id_tarea, ccl_id_origen);
 
-create index ix_tarea_configuracion_challenge_dias_minimos_tarea
-    on tarea_configuracion_challenge_dias_minimos (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_configuracion_challenge_dias_minimos to rcompensacion_comision;
 
@@ -4553,8 +4350,7 @@ create table tarea_configuracion_precio_hora
         constraint pk_tarea_configuracion_precio_hora
             primary key,
     id_tarea                           bigint                     not null
-        constraint fk_tarea_configuracion_precio_hora_tarea
-            references tarea,
+        ,
     icm_ck_tp_hora_comis               numeric(1)                 not null,
     icm_ck_tp_hora_inc_ptpo            numeric(1)                 not null,
     fecha_inicio                       date                       not null,
@@ -4577,11 +4373,9 @@ comment on column tarea_configuracion_precio_hora.fecha_fin is 'Fecha fin vigor 
 
 comment on column tarea_configuracion_precio_hora.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orígenes de sincronización';
 
-create index ix_tarea_configuracion_precio_hora_01
-    on tarea_configuracion_precio_hora (id_tarea, ccl_id_origen);
 
-create index ix_tarea_configuracion_precio_hora_tarea
-    on tarea_configuracion_precio_hora (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_configuracion_precio_hora to rcompensacion_comision;
 
@@ -4604,14 +4398,11 @@ create table tarea_fase
         constraint pk_tarea_fase
             primary key,
     id_tarea             bigint       not null
-        constraint fk_tarea_fase_tarea
-            references tarea,
+        ,
     id_fase              integer      not null
-        constraint fk_tarea_fase_fase
-            references fase,
+        ,
     id_estado_tarea_fase integer      not null
-        constraint fk_tarea_fase_estado_tarea_fase
-            references estado_tarea_fase,
+        ,
     fecha_hora_creacion  timestamp(6) not null,
     fecha_hora_inicio    timestamp(6),
     fecha_hora_fin       timestamp(6),
@@ -4635,14 +4426,11 @@ comment on column tarea_fase.fecha_hora_fin is 'Fecha en la que se termina de pr
 
 comment on column tarea_fase.es_activo is 'Flag que indica si la tarea fase está activa';
 
-create index ix_tarea_fase_estado_tarea_fase
-    on tarea_fase (id_estado_tarea_fase);
 
-create index ix_tarea_fase_fase
-    on tarea_fase (id_fase);
 
-create index ix_tarea_fase_tarea
-    on tarea_fase (id_tarea);
+
+
+
 
 grant select on table tarea_fase to rreporting_services_rrhh;
 
@@ -4665,17 +4453,13 @@ create table tarea_fase_accion
         constraint pk_tarea_fase_accion
             primary key,
     id_tarea_fase               bigint       not null
-        constraint fk_tarea_fase_accion_tarea_fase
-            references tarea_fase,
+        ,
     id_accion                   integer      not null
-        constraint fk_tarea_fase_accion_accion
-            references accion,
+        ,
     id_punto_ejecucion          integer      not null
-        constraint fk_tarea_fase_accion_punto_ejecucion
-            references punto_ejecucion,
+        ,
     id_estado_tarea_fase_accion integer      not null
-        constraint fk_tarea_fase_accion_estado_tarea_fase_accion
-            references estado_tarea_fase_accion,
+        ,
     fecha_hora_creacion         timestamp(6) not null,
     fecha_hora_inicio           timestamp(6),
     fecha_hora_fin              timestamp(6),
@@ -4701,17 +4485,13 @@ comment on column tarea_fase_accion.fecha_hora_fin is 'Fecha en la que se termin
 
 comment on column tarea_fase_accion.es_activo is 'Flag que indica si la tarea fase está activa';
 
-create index ix_tarea_fase_accion_accion
-    on tarea_fase_accion (id_accion);
 
-create index ix_tarea_fase_accion_estado_tarea_fase_accion
-    on tarea_fase_accion (id_estado_tarea_fase_accion);
 
-create index ix_tarea_fase_accion_punto_ejecucion
-    on tarea_fase_accion (id_punto_ejecucion);
 
-create index ix_tarea_fase_accion_tarea_fase
-    on tarea_fase_accion (id_tarea_fase);
+
+
+
+
 
 grant select on table tarea_fase_accion to rreporting_services_rrhh;
 
@@ -4731,11 +4511,9 @@ grant insert, select, update on table tarea_fase_accion to rmantenimiento_income
 
 create table tarea_fase_accion_dato
 (id_tarea_fase_accion bigint              not null
-        constraint fk_tarea_fase_accion_dato_tarea_fase_accion
-            references tarea_fase_accion,
+        ,
     id_tipo_dato         integer             not null
-        constraint fk_tarea_fase_accion_dato_tipo_dato
-            references tipo_dato,
+        ,
     dato                 varchar(255) not null,
     constraint pk_tarea_fase_accion_dato
         primary key (id_tarea_fase_accion, dato, id_tipo_dato));
@@ -4748,11 +4526,9 @@ comment on column tarea_fase_accion_dato.id_tipo_dato is 'Identificadode del tip
 
 comment on column tarea_fase_accion_dato.dato is 'Un string con lista de ids,o motivos en formato string';
 
-create index ix_tarea_fase_accion_dato_tarea_fase_accion
-    on tarea_fase_accion_dato (id_tarea_fase_accion);
 
-create index ix_tarea_fase_accion_dato_tipo_dato
-    on tarea_fase_accion_dato (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table tarea_fase_accion_dato to rcompensacion_comision;
 
@@ -4766,11 +4542,9 @@ grant insert, select, update on table tarea_fase_accion_dato to rmantenimiento_i
 
 create table tarea_fase_accion_venta_integra
 (id_tarea_fase_accion bigint              not null
-        constraint fk_tarea_fase_accion_venta_integra_tarea_fase_accion
-            references tarea_fase_accion,
+        ,
     id_tipo_dato         integer             not null
-        constraint fk_tarea_fase_accion_venta_integra_tipo_dato
-            references tipo_dato,
+        ,
     tienda               varchar(255) not null,
     fecha_desintegridad  date                not null,
     constraint pk_tarea_fase_accion_venta_integra
@@ -4786,11 +4560,9 @@ comment on column tarea_fase_accion_venta_integra.tienda is 'Id de la tienda afe
 
 comment on column tarea_fase_accion_venta_integra.fecha_desintegridad is 'Fecha desintegridad';
 
-create index ix_tarea_fase_accion_venta_integra_tarea_fase_accion
-    on tarea_fase_accion_venta_integra (id_tarea_fase_accion);
 
-create index ix_tarea_fase_accion_venta_integra_tipo_dato
-    on tarea_fase_accion_venta_integra (id_tipo_dato);
+
+
 
 grant delete, insert, select, update on table tarea_fase_accion_venta_integra to rcompensacion_comision;
 
@@ -4804,19 +4576,16 @@ grant insert, select, update on table tarea_fase_accion_venta_integra to rmanten
 
 create table tarea_limpieza
 (id_tarea            bigint                        not null
-        constraint fk_tarea_limpieza_tarea
-            references tarea,
+        ,
     fecha_hora_creacion timestamp(6)                  not null,
     nombre_usuario      varchar(32) default '' not null,
     id_tarea_limpieza   bigint generated always as identity (cache 100)
         constraint pk_tarea_limpieza
             primary key,
     id_estado_limpieza  integer                       not null
-        constraint fk_tarea_limpieza_estado_limpieza
-            references estado_limpieza,
+        ,
     id_tipo_limpieza    integer                       not null
-        constraint fk_tarea_limpieza_tipo_limpieza
-            references tipo_limpieza,
+        ,
     fecha_hora_inicio   timestamp(6),
     fecha_hora_fin      timestamp(6));
 
@@ -4838,14 +4607,11 @@ comment on column tarea_limpieza.fecha_hora_inicio is 'Fecha en la que se inici�
 
 comment on column tarea_limpieza.fecha_hora_fin is 'Fecha en la que se finalizó la limpieza';
 
-create index ix_tarea_limpieza_estado_limpieza
-    on tarea_limpieza (id_estado_limpieza);
 
-create index ix_tarea_limpieza_tarea
-    on tarea_limpieza (id_tarea);
 
-create index ix_tarea_limpieza_tipo_limpieza
-    on tarea_limpieza (id_tipo_limpieza);
+
+
+
 
 grant delete, insert, select, update on table tarea_limpieza to rcompensacion_comision;
 
@@ -4866,8 +4632,7 @@ create table tarea_localizacion_abierta
         constraint pk_tarea_localizacion_abierta
             primary key,
     id_tarea                      bigint                     not null
-        constraint fk_tarea_localizacion_abierta_tarea
-            references tarea,
+        ,
     ccl_id_cod_origen             varchar(24) not null,
     es_abierto                    numeric(1)                 not null,
     fecha                         date                       not null,
@@ -4887,11 +4652,9 @@ comment on column tarea_localizacion_abierta.fecha is 'Fecha de cuando esta abie
 
 comment on column tarea_localizacion_abierta.ccl_id_seccion is 'Identificador de la seccion, M4CCL_OR_SECCIONES, Maestro Meta4 secciones';
 
-create index ix_tarea_localizacion_abierta_01
-    on tarea_localizacion_abierta (id_tarea, ccl_id_cod_origen, fecha);
 
-create index ix_tarea_localizacion_abierta_tarea
-    on tarea_localizacion_abierta (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_abierta to rcompensacion_comision;
 
@@ -4912,8 +4675,7 @@ create table tarea_localizacion_calcular
         constraint pk_tarea_localizacion_calcular
             primary key,
     id_tarea                       bigint                     not null
-        constraint fk_tarea_localizacion_calcular_tarea
-            references tarea,
+        ,
     ccl_id_cod_origen              varchar(24) not null,
     std_id_work_locat              varchar(24) not null,
     es_calcula                     numeric(1)                 not null,
@@ -4936,14 +4698,11 @@ comment on column tarea_localizacion_calcular.fecha_inicio is 'Fecha hora  inici
 
 comment on column tarea_localizacion_calcular.fecha_fin is 'Fecha hora fin de la tarea';
 
-create index ix_tarea_localizacion_calcular_01
-    on tarea_localizacion_calcular (id_tarea, ccl_id_cod_origen, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_calcular_02
-    on tarea_localizacion_calcular (id_tarea, std_id_work_locat, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_calcular_tarea
-    on tarea_localizacion_calcular (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_calcular to rcompensacion_comision;
 
@@ -4964,8 +4723,7 @@ create table tarea_localizacion_comision_historico
         constraint pk_tarea_localizacion_comision_historico
             primary key,
     id_tarea                                 bigint                     not null
-        constraint fk_tarea_localizacion_comision_historico_tarea
-            references tarea,
+        ,
     ccl_id_cod_origen                        varchar(24) not null,
     std_id_work_locat                        varchar(24) not null,
     es_comisionable                          numeric(1)                 not null,
@@ -4988,14 +4746,11 @@ comment on column tarea_localizacion_comision_historico.fecha_inicio is 'Fecha f
 
 comment on column tarea_localizacion_comision_historico.fecha_fin is 'Fecha incio de hostórico de tiendas comisionables';
 
-create index ix_tarea_localizacion_comision_historico_01
-    on tarea_localizacion_comision_historico (id_tarea, ccl_id_cod_origen, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_comision_historico_02
-    on tarea_localizacion_comision_historico (id_tarea, std_id_work_locat, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_comision_historico_tarea
-    on tarea_localizacion_comision_historico (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_comision_historico to rcompensacion_comision;
 
@@ -5016,8 +4771,7 @@ create table tarea_localizacion_estado
         constraint pk_tarea_localizacion_estado
             primary key,
     id_tarea                     bigint                     not null
-        constraint fk_tarea_localizacion_estado_tarea
-            references tarea,
+        ,
     icm_id_estado                varchar(12) not null,
     std_id_leg_ent               varchar(24) not null,
     ccl_id_origen                varchar(24) not null,
@@ -5045,8 +4799,7 @@ comment on column tarea_localizacion_estado.fecha_fin is 'Fecha fin';
 
 comment on column tarea_localizacion_estado.icm_num_dias is 'Iindica el numero de dias entre los que ha de repartirse el cálculo challenge.';
 
-create index ix_tarea_localizacion_estado_tarea
-    on tarea_localizacion_estado (id_tarea);
+
 
 grant delete, insert, select, update on table tarea_localizacion_estado to rcompensacion_comision;
 
@@ -5063,8 +4816,7 @@ create table tarea_localizacion_festivo
         constraint pk_tarea_localizacion_festivo
             primary key,
     id_tarea                      bigint                     not null
-        constraint fk_tarea_localizacion_festivo_tarea
-            references tarea,
+        ,
     ccl_id_cod_origen             varchar(24) not null,
     fecha                         date                       not null);
 
@@ -5078,11 +4830,9 @@ comment on column tarea_localizacion_festivo.ccl_id_cod_origen is 'Id. Lugar de 
 
 comment on column tarea_localizacion_festivo.fecha is 'Fecha del dia festivo';
 
-create index ix_tarea_localizacion_festivo_01
-    on tarea_localizacion_festivo (id_tarea, ccl_id_cod_origen, fecha);
 
-create index ix_tarea_localizacion_festivo_tarea
-    on tarea_localizacion_festivo (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_festivo to rcompensacion_comision;
 
@@ -5103,8 +4853,7 @@ create table tarea_localizacion_historico
         constraint pk_tarea_localizacion_historico
             primary key,
     id_tarea                        bigint                     not null
-        constraint fk_tarea_localizacion_historico_tarea
-            references tarea,
+        ,
     ccl_id_cadena                   varchar(12) not null,
     std_id_leg_ent                  varchar(24) not null,
     ccl_id_cod_origen               varchar(24) not null,
@@ -5139,14 +4888,11 @@ comment on column tarea_localizacion_historico.fecha_fin is 'Fecha inicio';
 
 comment on column tarea_localizacion_historico.std_id_sub_geo_div is 'Id de provincia, tabla STD_SUB_GEO_DIV Maestro de provincias';
 
-create index ix_tarea_localizacion_historico_01
-    on tarea_localizacion_historico (id_tarea, ccl_id_cod_origen, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_historico_02
-    on tarea_localizacion_historico (id_tarea, std_id_work_locat, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_historico_tarea
-    on tarea_localizacion_historico (id_tarea);
+
+
+
 
 grant select on table tarea_localizacion_historico to rreporting_services_rrhh;
 
@@ -5183,11 +4929,9 @@ create table tarea_localizacion_jornada
     ccl_id_cod_origen             varchar(24) not null,
     fecha                         date                       not null,
     id_tipo_dato                  integer                    not null
-        constraint fk_tarea_localizacion_jornada_tipo_dato
-            references tipo_dato,
+        ,
     id_tarea                      bigint                     not null
-        constraint fk_tarea_localizacion_jornada_tarea
-            references tarea,
+        ,
     ccl_id_seccion                varchar(2)  not null,
     ccl_id_cadena                 varchar(12) not null,
     es_activo                     numeric(1)                 not null,
@@ -5224,8 +4968,7 @@ create table tarea_localizacion_online_historico
         constraint pk_tarea_localizacion_online_historico
             primary key,
     id_tarea                               bigint                     not null
-        constraint fk_tarea_localizacion_online_historico_tarea
-            references tarea,
+        ,
     ccl_id_cadena                          varchar(24) not null,
     std_id_leg_ent                         varchar(24) not null,
     ccl_id_cod_origen                      varchar(24) not null,
@@ -5254,14 +4997,11 @@ comment on column tarea_localizacion_online_historico.fecha_inicio is 'Fecha Ini
 
 comment on column tarea_localizacion_online_historico.fecha_fin is 'Fecha Fin';
 
-create index ix_tarea_localizacion_online_historico_01
-    on tarea_localizacion_online_historico (id_tarea, ccl_id_cod_origen, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_online_historico_02
-    on tarea_localizacion_online_historico (id_tarea, std_id_work_locat, fecha_inicio, fecha_fin);
 
-create index ix_tarea_localizacion_online_historico_tarea
-    on tarea_localizacion_online_historico (id_tarea);
+
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_online_historico to rcompensacion_comision;
 
@@ -5284,11 +5024,9 @@ create table tarea_localizacion_persona_jornada
     ccl_id_cod_origen                     varchar(24) not null,
     fecha                                 date                       not null,
     id_tipo_dato                          integer                    not null
-        constraint fk_tarea_localizacion_persona_jornada_tipo_dato
-            references tipo_dato,
+        ,
     id_tarea                              bigint                     not null
-        constraint fk_tarea_localizacion_persona_jornada_tarea
-            references tarea,
+        ,
     std_id_leg_ent                        varchar(24) not null,
     ccl_id_origen                         varchar(24) not null,
     ccl_id_person                         varchar(24) not null,
@@ -5333,11 +5071,9 @@ create table tarea_localizacion_persona_presencia
 (id_tarea_localizacion_persona_presencia bigint generated always as identity (cache 100),
     fecha                                   date                       not null,
     id_tipo_dato                            integer                    not null
-        constraint fk_tarea_localizacion_persona_presencia_tipo_dato
-            references tipo_dato,
+        ,
     id_tarea                                bigint                     not null
-        constraint fk_tarea_localizacion_persona_presencia_tarea
-            references tarea,
+        ,
     std_id_leg_ent                          varchar(24) not null,
     ccl_id_cod_origen                       varchar(24) not null,
     ccl_id_origen                           varchar(24) not null,
@@ -5382,17 +5118,13 @@ comment on column tarea_localizacion_persona_presencia.fecha_inicio_periodo is '
 comment on column tarea_localizacion_persona_presencia.cod_tipo_hora is 'Este dato está compuesto por los datos obtenidos de dos orígenes distintos, por un lado el tipo de hora que se obtiene de PTR (Obtenido de los SILes por país)
 y por el otro el que se obtiene de Meta4 (PeopleNet), M4ICM_X_TP_HORA (ICM_ID_TP_HORA).';
 
-create index ix_tarea_localizacion_persona_presencia_01
-    on tarea_localizacion_persona_presencia (fecha_inicio_periodo, id_tarea, ccl_id_person, fecha, ccl_id_cod_origen);
 
-create index ix_tarea_localizacion_persona_presencia_02
-    on tarea_localizacion_persona_presencia (fecha_inicio_periodo, id_tarea, ccl_id_cod_origen, fecha, ccl_id_person);
 
-create index ix_tarea_localizacion_persona_presencia_tarea
-    on tarea_localizacion_persona_presencia (id_tarea);
 
-create index ix_tarea_localizacion_persona_presencia_tipo_dato
-    on tarea_localizacion_persona_presencia (id_tipo_dato);
+
+
+
+
 
 grant select on table tarea_localizacion_persona_presencia to rreporting_services_rrhh;
 
@@ -5416,11 +5148,9 @@ create table tarea_localizacion_persona_venta
 (id_tarea_localizacion_persona_venta bigint generated always as identity (cache 100),
     fecha                               date                       not null,
     id_tarea                            bigint                     not null
-        constraint fk_tarea_localizacion_persona_venta_tarea
-            references tarea,
+        ,
     id_tipo_dato                        integer                    not null
-        constraint fk_tarea_localizacion_persona_venta_tipo_dato
-            references tipo_dato,
+        ,
     ccl_id_cod_origen                   varchar(24) not null,
     ccl_id_person                       varchar(24) not null,
     importe_sin_impuestos               numeric(23,8)             not null,
@@ -5458,17 +5188,13 @@ comment on column tarea_localizacion_persona_venta.ccl_id_seccion is 'Identifica
 
 comment on column tarea_localizacion_persona_venta.es_activo is 'Indicador de si esta activo';
 
-create index ix_tarea_localizacion_persona_venta_01
-    on tarea_localizacion_persona_venta (fecha_inicio_periodo, id_tarea, ccl_id_person, fecha, ccl_id_cod_origen);
 
-create index ix_tarea_localizacion_persona_venta_02
-    on tarea_localizacion_persona_venta (fecha_inicio_periodo, id_tarea, ccl_id_cod_origen, fecha, ccl_id_person);
 
-create index ix_tarea_localizacion_persona_venta_tarea
-    on tarea_localizacion_persona_venta (id_tarea);
 
-create index ix_tarea_localizacion_persona_venta_tipo_dato
-    on tarea_localizacion_persona_venta (id_tipo_dato);
+
+
+
+
 
 grant select on table tarea_localizacion_persona_venta to rreporting_services_rrhh;
 
@@ -5492,11 +5218,9 @@ create table tarea_localizacion_presencia
 (id_tarea_localizacion_presencia bigint generated always as identity (cache 100),
     fecha                           date                       not null,
     id_tarea                        bigint                     not null
-        constraint fk_tarea_localizacion_presencia_tarea
-            references tarea,
+        ,
     id_tipo_dato                    integer                    not null
-        constraint fk_tarea_localizacion_presencia_tipo_dato
-            references tipo_dato,
+        ,
     ccl_id_cod_origen               varchar(24) not null,
     ccl_id_seccion                  varchar(2)  not null,
     ccl_id_cadena                   varchar(12) not null,
@@ -5528,14 +5252,11 @@ comment on column tarea_localizacion_presencia.minutos is 'Tiempo en minutos tot
 
 comment on column tarea_localizacion_presencia.fecha_inicio_periodo is 'Fecha inicio periodo';
 
-create index ix_tarea_localizacion_presencia_01
-    on tarea_localizacion_presencia (fecha_inicio_periodo, id_tarea, ccl_id_cod_origen, fecha);
 
-create index ix_tarea_localizacion_presencia_tarea
-    on tarea_localizacion_presencia (id_tarea);
 
-create index ix_tarea_localizacion_presencia_tipo_dato
-    on tarea_localizacion_presencia (id_tipo_dato);
+
+
+
 
 grant select on table tarea_localizacion_presencia to rreporting_services_rrhh;
 
@@ -5560,8 +5281,7 @@ create table tarea_localizacion_presupuesto
         constraint pk_tarea_localizacion_presupuesto
             primary key,
     id_tarea                          bigint                     not null
-        constraint fk_tarea_localizacion_presupuesto_tarea
-            references tarea,
+        ,
     ccl_id_origen                     varchar(24) not null,
     std_id_leg_ent                    varchar(24) not null,
     ccl_id_cod_origen                 varchar(24) not null,
@@ -5575,8 +5295,7 @@ create table tarea_localizacion_presupuesto
     icm_ordinal                       varchar(12) not null,
     icm_ck_excepcion                  numeric(1)                 not null,
     id_tipo_presupuesto               integer                    not null
-        constraint fk_tarea_localizacion_presupuesto_tipo_presupuesto
-            references tipo_presupuesto,
+        ,
     es_activo                         numeric(1)                 not null);
 
 comment on table tarea_localizacion_presupuesto is 'Tabla con las bandas de presupuestos para localizaciones del cálculo challenge.';
@@ -5613,14 +5332,11 @@ comment on column tarea_localizacion_presupuesto.id_tipo_presupuesto is 'Identif
 
 comment on column tarea_localizacion_presupuesto.es_activo is 'Indicador de si esta activo';
 
-create index ix_tarea_localizacion_presupuesto_01
-    on tarea_localizacion_presupuesto (id_tarea, ccl_id_cod_origen);
 
-create index ix_tarea_localizacion_presupuesto_tarea
-    on tarea_localizacion_presupuesto (id_tarea);
 
-create index ix_tarea_localizacion_presupuesto_tipo_presupuesto
-    on tarea_localizacion_presupuesto (id_tipo_presupuesto);
+
+
+
 
 grant select on table tarea_localizacion_presupuesto to rreporting_services_rrhh;
 
@@ -5647,8 +5363,7 @@ create table tarea_localizacion_presupuesto_venta
         constraint pk_tarea_localizacion_presupuesto_venta
             primary key,
     id_tarea                                bigint                     not null
-        constraint fk_tarea_localizacion_presupuesto_venta_tarea
-            references tarea,
+        ,
     ccl_id_cadena                           varchar(12) not null,
     ccl_id_cod_origen                       varchar(24) not null,
     ccl_id_seccion                          varchar(2)  not null,
@@ -5656,16 +5371,13 @@ create table tarea_localizacion_presupuesto_venta
     importe_sin_impuestos                   numeric(23,8)             not null,
     importe_con_impuestos                   numeric(23,8)             not null,
     id_tipo_presupuesto                     integer                    not null
-        constraint fk_tarea_localizacion_presupuesto_venta_tipo_presupuesto
-            references tipo_presupuesto,
+        ,
     id_tipo_venta_concepto_challenge        integer
-        constraint fk_t_l_p_v_tipo_venta_concepto_challenge
-            references tipo_venta_concepto_challenge,
+        ,
     ccl_id_origen                           varchar(24) not null,
     es_activo                               numeric(1)                 not null,
     id_tipo_dato                            integer                    not null
-        constraint fk_tarea_localizacion_presupuesto_venta_tipo_dato
-            references tipo_dato,
+        ,
     fecha_fin                               date                       not null,
     fecha_inicio                            date                       not null);
 
@@ -5701,20 +5413,15 @@ comment on column tarea_localizacion_presupuesto_venta.fecha_fin is 'Fecha fin v
 
 comment on column tarea_localizacion_presupuesto_venta.fecha_inicio is 'Fecha inicio vigor presupuesto';
 
-create index ix_tarea_localizacion_presupuesto_tipo_dato
-    on tarea_localizacion_presupuesto_venta (id_tipo_dato);
 
-create index ix_tarea_localizacion_presupuesto_venta_01
-    on tarea_localizacion_presupuesto_venta (id_tarea, ccl_id_cod_origen);
 
-create index ix_tarea_localizacion_presupuesto_venta_tarea
-    on tarea_localizacion_presupuesto_venta (id_tarea);
 
-create index ix_tarea_localizacion_presupuesto_venta_tipo_presupuesto
-    on tarea_localizacion_presupuesto_venta (id_tipo_presupuesto);
 
-create index ix_t_l_p_v_tipo_venta_concepto_challenge
-    on tarea_localizacion_presupuesto_venta (id_tipo_venta_concepto_challenge);
+
+
+
+
+
 
 grant select on table tarea_localizacion_presupuesto_venta to rreporting_services_rrhh;
 
@@ -5740,11 +5447,9 @@ create table tarea_localizacion_venta
 (id_tarea_localizacion_venta bigint generated always as identity (cache 100),
     fecha                       date                       not null,
     id_tarea                    bigint                     not null
-        constraint fk_tarea_localizacion_venta_tarea
-            references tarea,
+        ,
     id_tipo_dato                integer                    not null
-        constraint fk_tarea_localizacion_venta_tipo_dato
-            references tipo_dato,
+        ,
     ccl_id_cadena               varchar(24) not null,
     ccl_id_cod_origen           varchar(24) not null,
     ccl_id_seccion              varchar(2)  not null,
@@ -5779,14 +5484,11 @@ comment on column tarea_localizacion_venta.importe_con_impuestos is 'Importe con
 
 comment on column tarea_localizacion_venta.fecha_inicio_periodo is 'Fecha inicio periodo';
 
-create index ix_tarea_localizacion_venta_01
-    on tarea_localizacion_venta (fecha_inicio_periodo, id_tarea, ccl_id_cod_origen, fecha);
 
-create index ix_tarea_localizacion_venta_tarea
-    on tarea_localizacion_venta (id_tarea);
 
-create index ix_tarea_localizacion_venta_tipo_dato
-    on tarea_localizacion_venta (id_tipo_dato);
+
+
+
 
 grant select on table tarea_localizacion_venta to rreporting_services_rrhh;
 
@@ -5819,11 +5521,9 @@ create table tarea_persona_ausencia_historico
         constraint pk_tarea_persona_ausencia_historico
             primary key,
     id_tarea                            bigint                     not null
-        constraint fk_tarea_persona_ausencia_historico_tarea
-            references tarea,
+        ,
     id_tipo_ausencia                    integer                    not null
-        constraint fk_tarea_persona_ausencia_historico_tipo_ausencia
-            references tipo_ausencia,
+        ,
     ccl_id_origen                       varchar(24) not null,
     ccl_id_person                       varchar(24) not null,
     std_or_hr_period                    varchar(24) not null,
@@ -5848,14 +5548,11 @@ comment on column tarea_persona_ausencia_historico.fecha_inicio is 'Feca fin';
 
 comment on column tarea_persona_ausencia_historico.fecha_fin is 'Fecha inicio';
 
-create index ix_tarea_persona_ausencia_historico_01
-    on tarea_persona_ausencia_historico (id_tarea, ccl_id_person, std_or_hr_period);
 
-create index ix_tarea_persona_ausencia_historico_tarea
-    on tarea_persona_ausencia_historico (id_tarea);
 
-create index ix_tarea_persona_ausencia_historico_tipo_ausencia
-    on tarea_persona_ausencia_historico (id_tipo_ausencia);
+
+
+
 
 grant delete, insert, select, update on table tarea_persona_ausencia_historico to rcompensacion_comision;
 
@@ -5876,8 +5573,7 @@ create table tarea_persona_coeficiente
         constraint pk_tarea_persona_coeficiente
             primary key,
     id_tarea                     bigint                     not null
-        constraint fk_tarea_persona_coeficiente_tarea
-            references tarea,
+        ,
     std_id_hr                    varchar(9)  not null,
     ccl_id_person                varchar(24) not null,
     std_or_hr_period             varchar(24) not null,
@@ -5909,11 +5605,9 @@ comment on column tarea_persona_coeficiente.fecha_inicio_parcial is 'Fecha Inici
 
 comment on column tarea_persona_coeficiente.fecha_fin_parcial is 'Fecha Fin Parcial';
 
-create index ix_tarea_persona_coeficiente_01
-    on tarea_persona_coeficiente (id_tarea, ccl_id_person, std_or_hr_period);
 
-create index ix_tarea_persona_coeficiente_tarea
-    on tarea_persona_coeficiente (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_persona_coeficiente to rcompensacion_comision;
 
@@ -5932,8 +5626,7 @@ grant insert, select, update on table tarea_persona_coeficiente to rmantenimient
 create table tarea_persona_estructura
 (id_tarea_persona_estructura bigint generated always as identity (cache 100),
     id_tarea                    bigint                     not null
-        constraint fk_tarea_persona_estructura_tarea
-            references tarea,
+        ,
     icm_id_estr_comision        bigint                     not null,
     ccl_id_origen               varchar(24) not null,
     std_id_hr                   varchar(9)  not null,
@@ -6036,11 +5729,9 @@ comment on column tarea_persona_estructura.es_festivo is 'Flag que indica si el 
 create table tarea_calculo
 (id_tarea_calculo                        bigint generated always as identity (cache 100),
     id_tarea                                bigint                     not null
-        constraint fk_tarea_calculo_tarea
-            references tarea,
+        ,
     id_algoritmo                            integer                    not null
-        constraint fk_tarea_calculo_algoritmo
-            references algoritmo,
+        ,
     id_tarea_localizacion_persona_presencia bigint,
     id_tarea_localizacion_persona_venta     bigint,
     id_tarea_localizacion_presencia         bigint,
@@ -6057,17 +5748,7 @@ create table tarea_calculo
     id_tipo_calculo                         varchar(12) not null,
     id_tipo_comision                        varchar(12) not null,
     constraint pk_tarea_calculo
-        primary key (fecha_inicio_periodo, id_tarea_calculo),
-    constraint fk_tarea_calculo_tarea_localizacion_persona_presencia
-        foreign key (fecha_inicio_periodo, id_tarea_localizacion_persona_presencia) references tarea_localizacion_persona_presencia,
-    constraint fk_tarea_calculo_tarea_localizacion_persona_venta
-        foreign key (fecha_inicio_periodo, id_tarea_localizacion_persona_venta) references tarea_localizacion_persona_venta,
-    constraint fk_tarea_calculo_tarea_localizacion_presencia
-        foreign key (fecha_inicio_periodo, id_tarea_localizacion_presencia) references tarea_localizacion_presencia,
-    constraint fk_tarea_calculo_tarea_localizacion_venta
-        foreign key (fecha_inicio_periodo, id_tarea_localizacion_venta) references tarea_localizacion_venta,
-    constraint fk_tarea_calculo_tarea_persona_estructura
-        foreign key (fecha_inicio_periodo, id_tarea_persona_estructura) references tarea_persona_estructura);
+        primary key (fecha_inicio_periodo, id_tarea_calculo));
 
 comment on table tarea_calculo is 'Tabla con el resultado del cálculo';
 
@@ -6107,36 +5788,25 @@ comment on column tarea_calculo.id_tipo_calculo is 'Id. tipo cálculo, M4ICM_X_T
 
 comment on column tarea_calculo.id_tipo_comision is 'Id. tipo comisión, M4ICM_X_TP_COMISION, Tabla maestro de tipos de comisión InCome';
 
-create index ix_tarea_calculo_01
-    on tarea_calculo (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, fecha, std_id_work_locat);
 
-create index ix_tarea_calculo_02
-    on tarea_calculo (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, fecha, std_id_work_locat_pago);
 
-create index ix_tarea_calculo_03
-    on tarea_calculo (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, id_tipo_calculo,
-                      id_tipo_comision, std_id_work_locat);
 
-create index ix_tarea_calculo_algoritmo
-    on tarea_calculo (id_algoritmo);
 
-create index ix_tarea_calculo_tarea
-    on tarea_calculo (id_tarea);
 
-create index ix_tarea_calculo_tarea_localizacion_persona_presencia
-    on tarea_calculo (fecha_inicio_periodo, id_tarea_localizacion_persona_presencia);
 
-create index ix_tarea_calculo_tarea_localizacion_persona_venta
-    on tarea_calculo (fecha_inicio_periodo, id_tarea_localizacion_persona_venta);
 
-create index ix_tarea_calculo_tarea_localizacion_presencia
-    on tarea_calculo (fecha_inicio_periodo, id_tarea_localizacion_presencia);
 
-create index ix_tarea_calculo_tarea_localizacion_venta
-    on tarea_calculo (fecha_inicio_periodo, id_tarea_localizacion_venta);
 
-create index ix_tarea_calculo_tarea_persona_estructura
-    on tarea_calculo (fecha_inicio_periodo, id_tarea_persona_estructura);
+
+
+
+
+
+
+
+
+
+
 
 grant select on table tarea_calculo to rreporting_services_rrhh;
 
@@ -6160,14 +5830,11 @@ grant insert, select, update on table tarea_calculo to rmantenimiento_income;
 
 create table tarea_localizacion_presupuesto_tarea_persona_estructura
 (id_tarea_localizacion_presupuesto bigint not null
-        constraint fk_t_l_p_t_p_e_tarea_localizacion_presupuesto
-            references tarea_localizacion_presupuesto,
+        ,
     fecha_inicio_periodo              date   not null,
     id_tarea_persona_estructura       bigint not null,
     constraint pk_tarea_localizacion_presupuesto_tarea_persona_estructura
-        primary key (id_tarea_localizacion_presupuesto, fecha_inicio_periodo, id_tarea_persona_estructura),
-    constraint fk_t_l_p_t_p_e_tarea_persona_estructura
-        foreign key (fecha_inicio_periodo, id_tarea_persona_estructura) references tarea_persona_estructura);
+        primary key (id_tarea_localizacion_presupuesto, fecha_inicio_periodo, id_tarea_persona_estructura));
 
 comment on table tarea_localizacion_presupuesto_tarea_persona_estructura is 'Relación entre TAREA_LOCALIZACION_PRESUPUESTO y TAREA_PERSONA_ESTRUCTURA';
 
@@ -6177,11 +5844,9 @@ comment on column tarea_localizacion_presupuesto_tarea_persona_estructura.fecha_
 
 comment on column tarea_localizacion_presupuesto_tarea_persona_estructura.id_tarea_persona_estructura is 'Identificador de la estructura';
 
-create index ix_t_l_p_t_p_e_tarea_localizacion_presupuesto
-    on tarea_localizacion_presupuesto_tarea_persona_estructura (id_tarea_localizacion_presupuesto);
 
-create index ix_t_l_p_t_p_e_tarea_persona_estructura
-    on tarea_localizacion_presupuesto_tarea_persona_estructura (fecha_inicio_periodo, id_tarea_persona_estructura);
+
+
 
 grant delete, insert, select, update on table tarea_localizacion_presupuesto_tarea_persona_estructura to rcompensacion_comision;
 
@@ -6197,15 +5862,11 @@ grant select on table tarea_localizacion_presupuesto_tarea_persona_estructura to
 
 grant insert, select, update on table tarea_localizacion_presupuesto_tarea_persona_estructura to rmantenimiento_income;
 
-create index ix_tarea_persona_estructura_01
-    on tarea_persona_estructura (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, icm_id_tp_calculo,
-                                 icm_id_tp_comision);
 
-create index ix_tarea_persona_estructura_02
-    on tarea_persona_estructura (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period);
 
-create index ix_tarea_persona_estructura_tarea
-    on tarea_persona_estructura (id_tarea);
+
+
+
 
 grant select on table tarea_persona_estructura to rreporting_services_rrhh;
 
@@ -6230,14 +5891,11 @@ grant insert, select, update on table tarea_persona_estructura to rmantenimiento
 create table tarea_persona_estructura_desplazamiento
 (id_tarea_persona_estructura_desplazamiento bigint generated always as identity (cache 100),
     id_tarea                                   bigint                     not null
-        constraint fk_tarea_persona_estructura_desplazamiento_tarea
-            references tarea,
+        ,
     id_tipo_opcion_calculo_efectiva            integer                    not null
-        constraint fk_t_p_e_d_tipo_opcion_calculo_efectiva
-            references tipo_opcion_calculo,
+        ,
     id_tipo_opcion_calculo_estructura          integer                    not null
-        constraint fk_t_p_e_d_tipo_opcion_calculo_estructura
-            references tipo_opcion_calculo,
+        ,
     ccl_id_cod_origen_destino                  varchar(24) not null,
     ccl_id_puesto_destino                      varchar(24) not null,
     ccl_id_seccion_destino                     varchar(24) not null,
@@ -6314,18 +5972,13 @@ comment on column tarea_persona_estructura_desplazamiento.fecha_inicio_periodo i
 
 comment on column tarea_persona_estructura_desplazamiento.es_incluir_total_condiciones is 'Flag que indica si se aplica a todas las condiciones o sólo a la comisión base';
 
-create index ix_tarea_persona_estructura_desplazamiento_01
-    on tarea_persona_estructura_desplazamiento (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period,
-                                                ordinal_estructura);
 
-create index ix_tarea_persona_estructura_desplazamiento_tarea
-    on tarea_persona_estructura_desplazamiento (id_tarea);
 
-create index ix_t_p_e_d_tipo_opcion_calculo_efectiva
-    on tarea_persona_estructura_desplazamiento (id_tipo_opcion_calculo_efectiva);
 
-create index ix_t_p_e_d_tipo_opcion_calculo_estructura
-    on tarea_persona_estructura_desplazamiento (id_tipo_opcion_calculo_estructura);
+
+
+
+
 
 grant select on table tarea_persona_estructura_desplazamiento to rreporting_services_rrhh;
 
@@ -6348,8 +6001,7 @@ grant insert, select, update on table tarea_persona_estructura_desplazamiento to
 create table tarea_persona_estructura_desplazamiento_real
 (id_tarea_persona_estructura_desplazamiento_real bigint generated always as identity (start with 1),
     id_tarea                                        bigint                     not null
-        constraint fk_tarea_persona_estructura_desplazamiento_real_tarea
-            references tarea,
+        ,
     icm_id_estructura_ambito                        bigint                     not null,
     icm_id_estr_comision                            bigint                     not null,
     icm_id_estr_comision_padre                      bigint                     not null,
@@ -6389,8 +6041,7 @@ comment on column tarea_persona_estructura_desplazamiento_real.ccl_id_origen is 
 
 comment on column tarea_persona_estructura_desplazamiento_real.fecha_inicio_periodo is 'Fecha inicio periodo';
 
-create index ix_tarea_persona_estructura_desplazamiento_real_tarea
-    on tarea_persona_estructura_desplazamiento_real (id_tarea);
+
 
 grant delete, insert, select, update on table tarea_persona_estructura_desplazamiento_real to rcompensacion_comision;
 
@@ -6409,11 +6060,9 @@ grant insert, select, update on table tarea_persona_estructura_desplazamiento_re
 create table tarea_persona_estructura_politica
 (id_tarea_persona_estructura_politica bigint generated always as identity (cache 100),
     id_tarea                             bigint                     not null
-        constraint fk_tarea_persona_estructura_politica_tarea
-            references tarea,
+        ,
     id_tipo_politica                     integer                    not null
-        constraint fk_tarea_persona_estructura_politica_tipo_politica
-            references tipo_politica,
+        ,
     ccl_id_origen                        varchar(24) not null,
     ccl_id_person                        varchar(24) not null,
     icm_id_estr_politicas                bigint                     not null,
@@ -6480,20 +6129,16 @@ create table tarea_calculo_ajuste
 (id_tarea_calculo_ajuste              bigint generated always as identity (start with 1),
     fecha_inicio_periodo                 date                       not null,
     id_tarea                             bigint                     not null
-        constraint fk_tarea_calculo_ajuste_tarea
-            references tarea,
+        ,
     id_tarea_persona_estructura_politica bigint                     not null,
     ccl_id_person                        varchar(24) not null,
     std_or_hr_period                     varchar(24) not null,
     importe                              numeric(23,8)             not null,
     fecha                                date                       not null,
     id_algoritmo_ajuste                  integer                    not null
-        constraint fk_tarea_calculo_ajuste_algoritmo_ajuste
-            references algoritmo_ajuste,
+        ,
     constraint pk_tarea_calculo_ajuste
-        primary key (fecha_inicio_periodo, id_tarea_calculo_ajuste),
-    constraint fk_tarea_calculo_ajuste_tarea_persona_estructura_politica
-        foreign key (fecha_inicio_periodo, id_tarea_persona_estructura_politica) references tarea_persona_estructura_politica);
+        primary key (fecha_inicio_periodo, id_tarea_calculo_ajuste));
 
 comment on table tarea_calculo_ajuste is 'Resultado del cálculo para algoritmos de ajuste manual.';
 
@@ -6513,17 +6158,13 @@ comment on column tarea_calculo_ajuste.importe is 'Importe';
 
 comment on column tarea_calculo_ajuste.fecha is 'Fecha correspondiente al día del  periodo para el que se cálculo y existe importe';
 
-create index ix_tarea_calculo_ajuste_01
-    on tarea_calculo_ajuste (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period, fecha);
 
-create index ix_tarea_calculo_ajuste_algoritmo_ajuste
-    on tarea_calculo_ajuste (id_algoritmo_ajuste);
 
-create index ix_tarea_calculo_ajuste_tarea
-    on tarea_calculo_ajuste (id_tarea);
 
-create index ix_tarea_calculo_ajuste_tarea_persona_estructura_politica
-    on tarea_calculo_ajuste (id_tarea_persona_estructura_politica, fecha_inicio_periodo);
+
+
+
+
 
 grant select on table tarea_calculo_ajuste to rreporting_services_rrhh;
 
@@ -6545,15 +6186,11 @@ grant select on table tarea_calculo_ajuste to rreporting_sil_sistema_informacion
 
 grant insert, select, update on table tarea_calculo_ajuste to rmantenimiento_income;
 
-create index ix_tarea_persona_estructura_politica_01
-    on tarea_persona_estructura_politica (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period,
-                                          id_tipo_politica);
 
-create index ix_tarea_persona_estructura_politica_tarea
-    on tarea_persona_estructura_politica (id_tarea);
 
-create index ix_tarea_persona_estructura_politica_tipo_politica
-    on tarea_persona_estructura_politica (id_tipo_politica);
+
+
+
 
 grant select on table tarea_persona_estructura_politica to rreporting_services_rrhh;
 
@@ -6580,8 +6217,7 @@ create table tarea_persona_externa
         constraint pk_tarea_persona_externa
             primary key,
     id_tarea                 bigint                     not null
-        constraint fk_tarea_persona_externa_tarea
-            references tarea,
+        ,
     ccl_id_person            varchar(24) not null,
     fecha_inicio             date                       not null,
     fecha_fin                date                       not null);
@@ -6598,11 +6234,9 @@ comment on column tarea_persona_externa.fecha_inicio is 'Fecha inicio vigor empl
 
 comment on column tarea_persona_externa.fecha_fin is 'Fecha fin vigor empleado externo';
 
-create index ix_tarea_persona_externa_01
-    on tarea_persona_externa (id_tarea, ccl_id_person);
 
-create index ix_tarea_persona_externa_tarea
-    on tarea_persona_externa (id_tarea);
+
+
 
 grant delete, insert, select, update on table tarea_persona_externa to rcompensacion_comision;
 
@@ -6617,8 +6251,7 @@ grant insert, select, update on table tarea_persona_externa to rmantenimiento_in
 create table tarea_persona_historico
 (id_tarea_persona_historico bigint generated always as identity (cache 100),
     id_tarea                   bigint                     not null
-        constraint fk_tarea_persona_historico_tarea
-            references tarea,
+        ,
     std_id_leg_ent             varchar(24) not null,
     ccl_id_cod_origen          varchar(24) not null,
     std_id_work_locat          varchar(24) not null,
@@ -6676,11 +6309,9 @@ comment on column tarea_persona_historico.fecha_inicio_periodo is 'Fecha inicio 
 
 comment on column tarea_persona_historico.fecha_antiguedad is 'Fecha de incorporación del empleado';
 
-create index ix_tarea_persona_historico_01
-    on tarea_persona_historico (fecha_inicio_periodo, id_tarea, ccl_id_person, std_or_hr_period);
 
-create index ix_tarea_persona_historico_tarea
-    on tarea_persona_historico (id_tarea);
+
+
 
 grant select on table tarea_persona_historico to rreporting_services_rrhh;
 
@@ -6705,8 +6336,7 @@ create table tarea_tipo_hora
         constraint pk_tarea_tipo_hora
             primary key,
     id_tarea                                      bigint                 not null
-        constraint fk_tarea_tipo_hora_tarea
-            references tarea,
+        ,
     cod_tipo_hora                                 integer                not null,
     es_excluido_calculo                           numeric(1)             not null,
     es_excluido_denominador                       numeric(1)             not null,
@@ -6739,11 +6369,9 @@ comment on column tarea_tipo_hora.es_excluido_denominador_y_repartido_provincia 
 
 comment on column tarea_tipo_hora.es_incluido_challenge_porcentaje is 'Indicador challenge incluido porcentaje';
 
-create index ix_tarea_tipo_hora_01
-    on tarea_tipo_hora (id_tarea, cod_tipo_hora);
 
-create index ix_tarea_tipo_hora_tarea
-    on tarea_tipo_hora (id_tarea);
+
+
 
 grant select on table tarea_tipo_hora to rreporting_services_rrhh;
 
@@ -6761,17 +6389,13 @@ grant select on table tarea_tipo_hora to rreporting_sil_sistema_informacional;
 
 grant insert, select, update on table tarea_tipo_hora to rmantenimiento_income;
 
-create index ix_trabajo_estado_trabajo
-    on trabajo (id_estado_trabajo);
 
-create index ix_trabajo_programacion
-    on trabajo (id_programacion);
 
-create index ix_trabajo_simulacion
-    on trabajo (id_simulacion);
 
-create index ix_trabajo_tipo_ambito
-    on trabajo (id_tipo_ambito);
+
+
+
+
 
 grant select on table trabajo to rreporting_services_rrhh;
 
@@ -6796,8 +6420,7 @@ create table trabajo_ambito_empresa
         constraint pk_trabajo_ambito_empresa
             primary key,
     id_trabajo                bigint                     not null
-        constraint fk_trabajo_ambito_empresa_trabajo
-            references trabajo,
+        ,
     std_id_leg_ent            varchar(24) not null);
 
 comment on table trabajo_ambito_empresa is 'Tabla que relaciona las empresas con el trabajo de cálculo';
@@ -6808,8 +6431,7 @@ comment on column trabajo_ambito_empresa.id_trabajo is 'Indetificador del trabaj
 
 comment on column trabajo_ambito_empresa.std_id_leg_ent is 'Id empresa STD_LEG_ENT Maestro de empresas';
 
-create index ix_trabajo_ambito_empresa_trabajo
-    on trabajo_ambito_empresa (id_trabajo);
+
 
 grant delete, insert, select, update on table trabajo_ambito_empresa to rcompensacion_comision;
 
@@ -6830,8 +6452,7 @@ create table trabajo_ambito_localizacion
         constraint pk_trabajo_ambito_localizacion
             primary key,
     id_trabajo                     bigint                     not null
-        constraint fk_trabajo_ambito_localizacion_trabajo
-            references trabajo,
+        ,
     std_id_leg_ent                 varchar(24) not null,
     std_id_work_locat              varchar(24) not null,
     ccl_id_origen                  varchar(24) not null);
@@ -6848,8 +6469,7 @@ comment on column trabajo_ambito_localizacion.std_id_work_locat is 'Id. Lugar de
 
 comment on column trabajo_ambito_localizacion.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_trabajo_ambito_localizacion_trabajo
-    on trabajo_ambito_localizacion (id_trabajo);
+
 
 grant delete, insert, select, update on table trabajo_ambito_localizacion to rcompensacion_comision;
 
@@ -6870,8 +6490,7 @@ create table trabajo_ambito_origen
         constraint pk_trabajo_ambito_origen
             primary key,
     id_trabajo               bigint                     not null
-        constraint fk_trabajo_ambito_origen_trabajo
-            references trabajo,
+        ,
     ccl_id_origen            varchar(24) not null);
 
 comment on table trabajo_ambito_origen is 'Tabla que relaciona el origen con el trabajo de cálculo';
@@ -6882,8 +6501,7 @@ comment on column trabajo_ambito_origen.id_trabajo is 'Indetificador del trabajo
 
 comment on column trabajo_ambito_origen.ccl_id_origen is 'Id. Origen, M4CCL_ORIGEN_DATOS_SINCRO, Maestro de orÃ­genes de sincronización';
 
-create index ix_trabajo_ambito_origen_trabajo
-    on trabajo_ambito_origen (id_trabajo);
+
 
 grant delete, insert, select, update on table trabajo_ambito_origen to rcompensacion_comision;
 
@@ -6904,8 +6522,7 @@ create table trabajo_ambito_persona
         constraint pk_trabajo_ambito_persona
             primary key,
     id_trabajo                bigint                     not null
-        constraint fk_trabajo_ambito_persona_trabajo
-            references trabajo,
+        ,
     std_id_leg_ent            varchar(54) not null,
     ccl_id_origen             varchar(24) not null,
     ccl_id_person             varchar(24) not null,
@@ -6925,8 +6542,7 @@ comment on column trabajo_ambito_persona.ccl_id_person is 'Id. Local, viene de S
 
 comment on column trabajo_ambito_persona.std_or_hr_period is 'Ordinal del periodo, vien de STD_HR_PERIOD, no hay tabla maestra de este campo';
 
-create index ix_trabajo_ambito_persona_trabajo
-    on trabajo_ambito_persona (id_trabajo);
+
 
 grant delete, insert, select, update on table trabajo_ambito_persona to rcompensacion_comision;
 
