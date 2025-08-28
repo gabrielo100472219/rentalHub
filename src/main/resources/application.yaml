@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 sql:
     init:
-      schema-locations: classpath:reset_schema.sql,classpath:schema.sql,classpath:foreign_keys.sql,classpath:indexes.sql
+      schema-locations: classpath:schema.sql
       mode: always
 
 logging:
