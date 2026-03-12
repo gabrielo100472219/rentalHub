@@ -1,17 +1,4 @@
-# rentalHub
-
-That's great progress! Since you've covered **Spring Data JPA**, a good project should let you dive deeper into:
-
-* Entity relationships (OneToMany, ManyToOne, ManyToMany)
-* Composite keys
-* Custom queries (JPQL or native SQL)
-* Specifications / Criteria API (for advanced filtering)
-* Pagination and sorting
-* Auditing (created/modified timestamps, user tracking)
-
----
-
-### 💡 **Project Idea: Equipment Rental Management System**
+# rentalHub: Equipment Rental Management System**
 
 #### 🧩 Concept:
 
