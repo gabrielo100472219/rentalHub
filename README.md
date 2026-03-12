@@ -1,4 +1,4 @@
-# rentalHub: Equipment Rental Management System**
+# rentalHub: Equipment Rental Management System
 
 #### 🧩 Concept:
 
